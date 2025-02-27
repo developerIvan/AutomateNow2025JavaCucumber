@@ -1,0 +1,10 @@
+
+*.class
+*.log
+*.tmp
+*.swp
+
+target/
+build/
+
+.idea/
