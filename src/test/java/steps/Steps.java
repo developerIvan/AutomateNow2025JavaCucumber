@@ -1,7 +1,7 @@
 package steps;
 
 import io.cucumber.java.en.*;
-import static org.junit.jupiter.api.Assertions.*;
+import org.testng.Assert;
 
 public class Steps {
     private String username;
@@ -28,6 +28,6 @@ public class Steps {
 
     @Then("It should see the message {string}")
     public void verifyMessage(String expectedMessage) {
-        assertEquals(expectedMessage, message, "Message show is not the expected.");
+        Assert.assertEquals(expectedMessage, message, "Message show is not the expected.");
     }
 }

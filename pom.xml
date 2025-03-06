@@ -17,6 +17,9 @@
         <junit.version>5.9.2</junit.version>
         <testng.version>7.11.0</testng.version>
         <cucumbertestng.version>7.21.1</cucumbertestng.version>
+        <logger-slf4j-api-version>1.7.36</logger-slf4j-api-version>
+        <logger-logback-api-version>1.2.11</logger-logback-api-version>
+        <pi-container-version>7.0.0</pi-container-version>
     </properties>
 
     <dependencies>
@@ -42,20 +45,10 @@
             <version>${selenium.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
+
 
         <!-- Surefire Plugin para ejecutar pruebas con Maven -->
-        <dependency>
-            <groupId>org.apache.maven.surefire</groupId>
-            <artifactId>surefire-junit-platform</artifactId>
-            <version>2.22.2</version>
-            <scope>test</scope>
-        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.testng/testng -->
         <dependency>
             <groupId>org.testng</groupId>
@@ -67,6 +60,24 @@
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-testng</artifactId>
             <version>${cucumbertestng.version}</version>
+        </dependency>
+        <!-- API de SLF4J -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${logger-slf4j-api-version}</version>
+        </dependency>
+        <!-- Implementación de Logback -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logger-logback-api-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-picocontainer</artifactId>
+            <version>${pi-container-version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
