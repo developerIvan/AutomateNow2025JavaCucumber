@@ -18,7 +18,7 @@ import org.testng.ITestContext;
 public class GeneralSelectorActions {
     private static final Logger logger = LoggerFactory.getLogger(GeneralSelectorActions.class);
     public WebDriver mainDriver;
-    private String errorCode = "00";
+    private String errorCode = "GeneralSteps00";
     private Date currentDate = new Date();
     private Wait<WebDriver> wait;
     public GeneralSelectorActions(){
@@ -64,7 +64,7 @@ public class GeneralSelectorActions {
             wait.until(ExpectedConditions.visibilityOf(expectedElement));
             return Result.success(expectedElement);
         } catch (Exception e) {
-            this.getLogger().error("---------------------Error on finding WebElement------------------- \n");
+            this.getLogger().error("---------------------Error on waiting WebElement------------------- \n");
             this.getLogger().error("Error code : "+getErrorCode()+ " Date:"+ getDateTime() +"\n");
             this.getLogger().error("exception trace: "+e );
 
@@ -76,7 +76,7 @@ public class GeneralSelectorActions {
         return currentDate.toString();
     }
 
-    private String getErrorCode() {
+    public String getErrorCode() {
         return errorCode;
     }
 
@@ -114,6 +114,21 @@ public class GeneralSelectorActions {
             return Result.success(elements);
         } catch (NoSuchElementException e) {
             return Result.failure("Elements not found: with css selector  "+cssSelector );
+        }
+    }
+
+    public Result<Boolean> clickElementByXpathText(String textParam,String errorCode) {
+        String xpathSelector = "";
+        try {
+            xpathSelector = "//*[text()='"+textParam+"']";
+            mainDriver.findElement(By.xpath(xpathSelector)).click();
+            return Result.success(true);
+        } catch (NoSuchElementException e) {
+            this.getLogger().error("---------------------Error on clicking WebElement------------------- \n");
+            this.getLogger().error("Error code : "+errorCode+ " Date:"+ getDateTime() +"\n");
+            this.getLogger().error("exception trace: "+e );
+            return Result.failure("Element not found with xpath selector  "+xpathSelector );
+
         }
     }
 

@@ -14,6 +14,12 @@ public class PracticeSteps {
         practicePage.setWebDriver(configHooks.getWebDriver());
     }
 
+    @Given("User goes to web page {string}")
+    public void userGoesToWebPage(String url) {
+        boolean pageIsLoaded = practicePage.openPracticePage(url);
+        Assert.assertTrue(pageIsLoaded, "Error opening page, error code : "+practicePage.getPracticeErrorCode());
+    }
+
     @Then("the user validates if section {string} from Practice page is visible")
     public void validateStringIsVisible (String stringParam) {
         Result<WebElement> element = practicePage.findElementByXpathText(stringParam,practicePage.getPracticeErrorCode());
