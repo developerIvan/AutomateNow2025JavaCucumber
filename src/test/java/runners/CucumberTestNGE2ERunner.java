@@ -9,7 +9,7 @@ import org.testng.annotations.DataProvider;
         glue = "stepsDefinitions",
         plugin = {"pretty", "html:target/cucumber-reports.html"},
         monochrome = true,
-        tags = "@E2E and @JavascriptSection"
+        tags = "@E2E"
 )
 public class CucumberTestNGE2ERunner extends    AbstractTestNGCucumberTests{
 

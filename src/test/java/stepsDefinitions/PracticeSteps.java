@@ -16,15 +16,30 @@ public class PracticeSteps {
 
     @Given("User goes to web page {string}")
     public void userGoesToWebPage(String url) {
-        boolean pageIsLoaded = practicePage.openPracticePage(url);
-        Assert.assertTrue(pageIsLoaded, "Error opening page, error code : "+practicePage.getPracticeErrorCode());
+        String errorCode = practicePage.getUniqueErrorCode(practicePage.getPracticeErrorCode())+" "+ practicePage.getCurrentDate();
+        String errorMessage = "";
+        boolean pageIsLoaded = false;
+        Result<Boolean> openPageResult = practicePage.openPage(url,errorCode);
+        if(openPageResult.isSuccess()){
+            pageIsLoaded = openPageResult.getValue().get();
+        }else if(openPageResult.isFailure()){
+            errorMessage = openPageResult.getError().get();
+        }
+        Assert.assertTrue(pageIsLoaded, "Error opening page"+errorMessage);
     }
 
     @Then("the user validates if section {string} from Practice page is visible")
     public void validateStringIsVisible (String stringParam) {
-        Result<WebElement> element = practicePage.findElementByXpathText(stringParam,practicePage.getPracticeErrorCode());
-        Assert.assertTrue(element.isSuccess(), "Element not found with text: "+stringParam + " error code: "+practicePage.getPracticeErrorCode() + "");
-        WebElement elementToEvaluate = element.getValue().get();
-        Assert.assertTrue(elementToEvaluate.isDisplayed(), "Element "+stringParam+" from page section not displayed, error code: "+practicePage.getPracticeErrorCode());
+        String errorCode = practicePage.getUniqueErrorCode(practicePage.getPracticeErrorCode())+" "+ practicePage.getCurrentDate();
+        String errorMessage = "";
+        Result<WebElement> element = practicePage.findElementByXpathText(stringParam,errorCode);
+        Boolean epectedStringIsVisible = false;
+        if(element.isSuccess()){
+            epectedStringIsVisible = element.getValue().get().isDisplayed();
+        }else if(element.isFailure()){
+            errorMessage = element.getError().get();
+        }
+
+        Assert.assertTrue(epectedStringIsVisible, "Element "+stringParam+" from page section not displayed, "+errorMessage);
     }
 }
