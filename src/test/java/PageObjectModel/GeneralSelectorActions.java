@@ -11,10 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 
-import org.testng.ITestContext;
 public class GeneralSelectorActions {
     private static final Logger logger = LoggerFactory.getLogger(GeneralSelectorActions.class);
     public WebDriver mainDriver;
@@ -76,9 +77,17 @@ public class GeneralSelectorActions {
         return currentDate.toString();
     }
 
+    public String getCurrentDate() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime now = LocalDateTime.now();
+        return now.format(formatter);
+    }
+
     public String getErrorCode() {
         return errorCode;
     }
+
+
 
     public Result<WebElement> findElementBySpecificId(String IdParam) {
         try {
@@ -130,6 +139,28 @@ public class GeneralSelectorActions {
             return Result.failure("Element not found with xpath selector  "+xpathSelector );
 
         }
+    }
+
+    public Result<Boolean> clickElementById(String id,String errorCode) {
+        try {
+            mainDriver.findElement(By.id(id)).click();
+            return Result.success(true);
+        } catch (NoSuchElementException e) {
+            this.getLogger().error("---------------------Error on clicking WebElement------------------- \n");
+            this.getLogger().error("Error code : "+errorCode+ " Date:"+ getDateTime() +"\n");
+            this.getLogger().error("exception trace: "+e );
+            return Result.failure("Element not found with given id: "+id +" Error code: "+errorCode);
+
+        }
+    }
+
+    public Boolean clickOnLinkSection(String linkText,String errorCode) {
+        Result<Boolean> clickElement = clickElementByXpathText(linkText,errorCode);
+
+        if(clickElement.isFailure()){
+            return false;
+        }
+        return true;
     }
 
 

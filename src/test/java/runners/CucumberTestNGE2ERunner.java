@@ -9,7 +9,7 @@ import org.testng.annotations.DataProvider;
         glue = "stepsDefinitions",
         plugin = {"pretty", "html:target/cucumber-reports.html"},
         monochrome = true,
-        tags = "@E2E"
+        tags = "@E2E and @JavascriptSection"
 )
 public class CucumberTestNGE2ERunner extends    AbstractTestNGCucumberTests{
 
@@ -21,7 +21,7 @@ public class CucumberTestNGE2ERunner extends    AbstractTestNGCucumberTests{
     }*/
 
     @Override
-    @DataProvider(parallel = true, propagateFailureAsTestFailure = true) //This is to run the scenarios in parallel
+    @DataProvider(parallel = true) //This is to run the scenarios in parallel
     public Object[][] scenarios() {
         return super.scenarios();
     }

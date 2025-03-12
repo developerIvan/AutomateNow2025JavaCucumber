@@ -6,6 +6,9 @@ import ResultPattern.Result;
 import io.cucumber.java.en.*;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
+
+import java.time.format.DateTimeFormatter;
+
 public class JavaScriptSectionSteps {
     private JavaScriptSection javaScriptSection;
 
@@ -14,18 +17,38 @@ public class JavaScriptSectionSteps {
         javaScriptSection.setWebDriver(configHooks.getWebDriver());
     }
 
-    @When("the user clicks on the {string} link")
-    public void userClicksOnTheLink(String linkText) {
-        Boolean clickResult = javaScriptSection.clickOnLinkSection(linkText);
-        Assert.assertTrue(clickResult, "Error clicking on link: "+linkText+ " Error code" + javaScriptSection.getJavaScriptSectionErrorCode());
-    }
+
 
     @Then("the user validates if Javascript section {string} is visible")
     public void validateStringIsVisible (String stringParam) {
-        Result<WebElement> element = javaScriptSection.findElementByXpathText(stringParam,javaScriptSection.getJavaScriptSectionErrorCode());
-        Assert.assertTrue(element.isSuccess(), "Element not found with text: "+stringParam + " error code: "+javaScriptSection.getJavaScriptSectionErrorCode() + "");
+        String errorCode = javaScriptSection.getErrorCode()+" "+ javaScriptSection.getCurrentDate();
+        Result<WebElement> element = javaScriptSection.findElementByXpathText(stringParam,errorCode);
+        Assert.assertTrue(element.isSuccess(), "Element not found with text: "+stringParam + " error code: "+errorCode + "");
         WebElement elementToEvaluate = element.getValue().get();
-        Assert.assertTrue(elementToEvaluate.isDisplayed(), "Element "+stringParam+" from page section not displayed, error code: "+javaScriptSection.getJavaScriptSectionErrorCode());
+        Assert.assertTrue(elementToEvaluate.isDisplayed(), "Element "+stringParam+" from page section not displayed, error code: "+errorCode);
+    }
+
+    @When("the user clicks on the {string} link in javascript section")
+    public void userClicksOnTheLink(String linkText) {
+        String errorCode = javaScriptSection.getJavaScriptSectionErrorCode()+" "+ javaScriptSection.getCurrentDate();
+        Boolean clickResult = javaScriptSection.clickOnLinkSection(linkText,errorCode);
+        Assert.assertTrue(clickResult, "Error clicking on link: "+linkText+ " Error code" + errorCode);
+    }
+
+    @When("the user clicks on the button with id {string} in javascript section")
+    public void userClicksOnTheJavascriptSectionButton(String buttonId) {
+        String errorCode = javaScriptSection.getJavaScriptSectionErrorCode()+" "+ javaScriptSection.getCurrentDate();
+        String errorMessage = "";
+        Result<Boolean> clickResult = javaScriptSection.clickElementById(buttonId,errorCode);
+        boolean expectedValue = true;
+        if(clickResult.isFailure()){
+            errorMessage = clickResult.getError().get();
+            expectedValue = false;
+        }else{
+            expectedValue = clickResult.getValue().get();
+        }
+
+        Assert.assertTrue(expectedValue, "Error clicking on link: "+buttonId+ " " + errorMessage);
     }
 
 

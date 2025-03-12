@@ -9,14 +9,7 @@ public class JavaScriptSection extends GeneralSelectorActions  {
     }
 
 
-    public Boolean clickOnLinkSection(String linkText) {
-        Result<Boolean> clickElement = clickElementByXpathText(linkText,getJavaScriptSectionErrorCode());
 
-        if(clickElement.isFailure()){
-            return false;
-        }
-        return true;
-    }
 
     public String getJavaScriptSectionErrorCode() {
         return errorCode;

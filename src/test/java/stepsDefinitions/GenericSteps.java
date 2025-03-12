@@ -21,6 +21,12 @@ public class GenericSteps {
         Assert.assertTrue(elementIsVisible.getValue().get().isDisplayed(), "Element not found with text: "+text + " error code: "+generalSelectorActions.getErrorCode() + "");
     }
 
+    @When("the user clicks on the {string} link")
+    public void userClicksOnTheLink(String linkText) {
+        Boolean clickResult = generalSelectorActions.clickOnLinkSection(linkText,generalSelectorActions.getErrorCode());
+        Assert.assertTrue(clickResult, "Error clicking on link: "+linkText+ " Error code" + generalSelectorActions.getErrorCode());
+    }
+
     @Then("the user validates if the string {string} is visible")
     public void validateStringIsVisible (String stringParam) {
         Result<WebElement> element = generalSelectorActions.findElementByXpathText(stringParam,generalSelectorActions.getErrorCode());
