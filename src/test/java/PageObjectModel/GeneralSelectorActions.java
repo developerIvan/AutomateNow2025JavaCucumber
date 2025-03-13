@@ -15,11 +15,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import utils.ErrorLogManager;
 
 public class GeneralSelectorActions {
     private static final Logger logger = LoggerFactory.getLogger(GeneralSelectorActions.class);
     public WebDriver mainDriver;
-    private String errorCode = "GeneralSteps00";
+    private String errorCode = "GeneralStepsError-";
     private Date currentDate = new Date();
     private Wait<WebDriver> wait;
     public GeneralSelectorActions(){
@@ -40,11 +41,9 @@ public class GeneralSelectorActions {
             mainDriver.get(url);
             return Result.success(true);
         } catch (Exception e) {
-            this.getLogger().error("---------------------Error on Opening Webbrowser------------------- \n");
-            this.getLogger().error("Error code : "+errorCode+ " Date:"+ getDateTime() +"\n");
-            this.getLogger().error("exception trace: "+e );
-
-            return Result.failure("Error opening page: "+url+" error code: "+errorCode);
+            String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
+            ErrorLogManager.logError(errorId,e,"Error on Opening WebBrowser");
+            return Result.failure("Error opening page: "+url+" error code: "+errorId);
         }
     }
     public Result<WebElement> findElementByXpathText(String textParam,String errorCode) {
@@ -53,11 +52,9 @@ public class GeneralSelectorActions {
              xpathSelector = "//*[contains(text(),'"+textParam+"')]";
             return Result.success(mainDriver.findElement(By.xpath(xpathSelector)));
         } catch (NoSuchElementException e) {
-            this.getLogger().error("---------------------Error on finding WebElement------------------- \n");
-            this.getLogger().error("Error code : "+errorCode+ " Date:"+ getDateTime() +"\n");
-            this.getLogger().error("exception trace: "+e );
-
-            return Result.failure("Element not found: with xpath selector  "+xpathSelector + " Error Code:"+errorCode);
+            String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
+            ErrorLogManager.logError(errorId,e,"Error on finding WebElement");
+            return Result.failure("Element not found: with xpath selector  "+xpathSelector + " Error Code:"+errorId);
         }
     }
 
@@ -69,11 +66,9 @@ public class GeneralSelectorActions {
             wait.until(ExpectedConditions.visibilityOf(expectedElement));
             return Result.success(expectedElement);
         } catch (Exception e) {
-            this.getLogger().error("---------------------Error on waiting WebElement------------------- \n");
-            this.getLogger().error("Error code : "+errorCode+ " Date:"+ getDateTime() +"\n");
-            this.getLogger().error("exception trace: "+e );
-
-            return Result.failure("Element not found: with xpath selector  "+xpathSelector +" after waiting 30 seconds Error Code:"+errorCode);
+            String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
+            ErrorLogManager.logError(errorId,e,"Error on waiting WebElement");
+            return Result.failure("Element not found: with xpath selector  "+xpathSelector +" after waiting 30 seconds Error Code:"+errorId);
         }
     }
 
@@ -100,10 +95,9 @@ public class GeneralSelectorActions {
         try {
             return Result.success(mainDriver.findElement(By.id(IdParam)));
         } catch (NoSuchElementException e) {
-            this.getLogger().error("---------------------Error on clicking WebElement------------------- \n");
-            this.getLogger().error("Error code : "+errorCodeParam+ " Date:"+ getDateTime() +"\n");
-            this.getLogger().error("exception trace: "+e );
-            return Result.failure("Element not found with id  "+IdParam + " Error Code:"+errorCodeParam);
+            String errorId = ErrorLogManager.getUniqueErrorCode(errorCodeParam);
+            ErrorLogManager.logError(errorId,e,"Error on find WebElement");
+            return Result.failure("Element not found with id  "+IdParam + " Error Code:"+errorId);
         }
     }
 
@@ -143,40 +137,28 @@ public class GeneralSelectorActions {
             mainDriver.findElement(By.xpath(xpathSelector)).click();
             return Result.success(true);
         } catch (NoSuchElementException e) {
-            this.getLogger().error("---------------------Error on clicking WebElement------------------- \n");
-            this.getLogger().error("Error code : "+errorCode+ " Date:"+ getDateTime() +"\n");
-            this.getLogger().error("exception trace: "+e );
-            return Result.failure("Element not found with xpath selector  "+xpathSelector );
+            String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
+            ErrorLogManager.logError(errorId,e,"Error on clicking WebElement");
+            return Result.failure("Element not found with xpath selector  "+xpathSelector + " Error Code:"+errorId);
 
         }
     }
 
     public Result<Boolean> clickElementById(String id,String errorCode) {
-
+        String errorId ="";
         try {
             Result<WebElement> clickableElement = findElementBySpecificId(id,errorCode);
             if(clickableElement.isFailure()){
-                return Result.failure("Element not found with given id: "+id +" Error code: "+errorCode);
+                return Result.failure(clickableElement.getError().toString().replace("Optional",""));
             }
             clickableElement.getValue().get().click();
             return Result.success(true);
         } catch (Exception e) {
-            this.getLogger().error("---------------------Error on clicking WebElement------------------- \n");
-            this.getLogger().error("Error code : "+errorCode+ " Date:"+ getDateTime() +"\n");
-            this.getLogger().error("exception trace: "+e );
-            return Result.failure("Element not found with given id: "+id +" Error code: "+errorCode);
+            errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
+            ErrorLogManager.logError(errorId,e,"Error on clicking WebElement");;
+            return Result.failure("Could not be able to click on WebElement found with given id:"+id+" Error Code: "+errorId);
 
         }
     }
-
-    public Boolean clickOnLinkSection(String linkText,String errorCode) {
-        Result<Boolean> clickElement = clickElementByXpathText(linkText,errorCode);
-
-        if(clickElement.isFailure()){
-            return false;
-        }
-        return true;
-    }
-
 
 }

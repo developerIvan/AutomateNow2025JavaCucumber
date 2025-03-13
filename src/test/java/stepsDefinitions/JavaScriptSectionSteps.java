@@ -21,10 +21,9 @@ public class JavaScriptSectionSteps {
 
     @Then("the user validates if Javascript section {string} is visible")
     public void validateStringIsVisible (String stringParam) {
-        String errorCode =javaScriptSection.getUniqueErrorCode( javaScriptSection.getJavaScriptSectionErrorCode())+" "+ javaScriptSection.getCurrentDate();
         Boolean epectedStringIsVisible = false;
         String errorMessage = "";
-        Result<WebElement> element = javaScriptSection.findElementByXpathText(stringParam,errorCode);
+        Result<WebElement> element = javaScriptSection.findElementByXpathText(stringParam,javaScriptSection.getJavaScriptSectionErrorCode());
            if(element.isSuccess()){
                 epectedStringIsVisible = element.getValue().get().isDisplayed();
            }else{
@@ -35,11 +34,10 @@ public class JavaScriptSectionSteps {
 
     @When("the user clicks on the {string} link in javascript section")
     public void userClicksOnTheLink(String linkText) {
-        String errorCode =javaScriptSection.getUniqueErrorCode( javaScriptSection.getJavaScriptSectionErrorCode())+" "+ javaScriptSection.getCurrentDate();
         Boolean expectedClickResult = false;
         String errorMessage = "";
 
-        Result<Boolean> clickResult = javaScriptSection.clickElementByXpathText(linkText,errorCode);
+        Result<Boolean> clickResult = javaScriptSection.clickElementByXpathText(linkText,javaScriptSection.getJavaScriptSectionErrorCode());
         if(clickResult.isSuccess()){
             expectedClickResult = clickResult.getValue().get();
         }else{
@@ -50,9 +48,8 @@ public class JavaScriptSectionSteps {
 
     @When("the user clicks on the button with id {string} in javascript section")
     public void userClicksOnTheJavascriptSectionButton(String buttonId) {
-        String errorCode =javaScriptSection.getUniqueErrorCode( javaScriptSection.getJavaScriptSectionErrorCode())+" "+ javaScriptSection.getCurrentDate();
         String errorMessage = "";
-        Result<Boolean> clickResult = javaScriptSection.clickElementById(buttonId,errorCode);
+        Result<Boolean> clickResult = javaScriptSection.clickElementById(buttonId,javaScriptSection.getJavaScriptSectionErrorCode());
         boolean expectedValue = true;
         if(clickResult.isFailure()){
             errorMessage = clickResult.getError().get();
@@ -61,7 +58,7 @@ public class JavaScriptSectionSteps {
             expectedValue = clickResult.getValue().get();
         }
 
-        Assert.assertTrue(expectedValue, "Error clicking on link: "+buttonId+ " " + errorMessage);
+        Assert.assertTrue(expectedValue, "Error clicking on link " + errorMessage);
     }
 
 

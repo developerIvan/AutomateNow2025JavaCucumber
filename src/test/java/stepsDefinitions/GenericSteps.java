@@ -16,9 +16,8 @@ public class GenericSteps {
 
     @And("the user waits for text {string} to be visible")
     public void userWaitsForTextToBeVisible(String text) {
-        String errorCode =generalSelectorActions.getUniqueErrorCode( generalSelectorActions.getErrorCode()) + " " + generalSelectorActions.getCurrentDate();
         String errorMessage = "";
-        Result<WebElement> elementIsVisible = generalSelectorActions.waitElementByXpathText(text,errorCode);
+        Result<WebElement> elementIsVisible = generalSelectorActions.waitElementByXpathText(text,generalSelectorActions.getErrorCode());
         Boolean expectedTextIsVisible = false;
 
         if(elementIsVisible.isSuccess()){
@@ -27,7 +26,7 @@ public class GenericSteps {
             errorMessage = elementIsVisible.getError().get();
         }
 
-        Assert.assertTrue(expectedTextIsVisible, "Element not found with text: "+text + " error code: "+errorMessage + "");
+        Assert.assertTrue(expectedTextIsVisible, "Element not found with text: "+text + " "+errorMessage + "");
     }
 
     @When("the user clicks on the {string} link")
@@ -58,6 +57,6 @@ public class GenericSteps {
             errorMessage = elementResult.getError().get();
         }
 
-        Assert.assertTrue(stringIsVisible, "Element "+stringParam+" not displayed Error code: "+errorMessage);
+        Assert.assertTrue(stringIsVisible, "Element "+stringParam+" not displayed "+errorMessage);
     }
 }

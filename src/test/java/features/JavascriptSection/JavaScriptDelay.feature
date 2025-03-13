@@ -1,4 +1,5 @@
 Feature: Javascript Delay section page
+
   @E2E @JavascriptSection
   Scenario: User is able to trigger the JavaScript Delay section page
     Given User goes to web page "https://practice-automation.com/"

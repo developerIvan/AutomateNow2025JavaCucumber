@@ -3,7 +3,7 @@ package PageObjectModel;
 import ResultPattern.Result;
 
 public class JavaScriptSection extends GeneralSelectorActions  {
-    private final String errorCode = "JavaScriptSection01";
+    private final String errorCode = "JavaScriptSectionError-";
     public JavaScriptSection() {
         super();
     }

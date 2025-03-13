@@ -16,10 +16,9 @@ public class PracticeSteps {
 
     @Given("User goes to web page {string}")
     public void userGoesToWebPage(String url) {
-        String errorCode = practicePage.getUniqueErrorCode(practicePage.getPracticeErrorCode())+" "+ practicePage.getCurrentDate();
         String errorMessage = "";
         boolean pageIsLoaded = false;
-        Result<Boolean> openPageResult = practicePage.openPage(url,errorCode);
+        Result<Boolean> openPageResult = practicePage.openPage(url,practicePage.getPracticeErrorCode());
         if(openPageResult.isSuccess()){
             pageIsLoaded = openPageResult.getValue().get();
         }else if(openPageResult.isFailure()){
@@ -30,9 +29,8 @@ public class PracticeSteps {
 
     @Then("the user validates if section {string} from Practice page is visible")
     public void validateStringIsVisible (String stringParam) {
-        String errorCode = practicePage.getUniqueErrorCode(practicePage.getPracticeErrorCode())+" "+ practicePage.getCurrentDate();
         String errorMessage = "";
-        Result<WebElement> element = practicePage.findElementByXpathText(stringParam,errorCode);
+        Result<WebElement> element = practicePage.findElementByXpathText(stringParam,practicePage.getPracticeErrorCode());
         Boolean epectedStringIsVisible = false;
         if(element.isSuccess()){
             epectedStringIsVisible = element.getValue().get().isDisplayed();
