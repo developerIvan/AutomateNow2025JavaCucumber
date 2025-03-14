@@ -14,26 +14,19 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import utils.ErrorLogManager;
 
 public class GeneralSelectorActions {
-    private static final Logger logger = LoggerFactory.getLogger(GeneralSelectorActions.class);
     public WebDriver mainDriver;
     private String errorCode = "GeneralStepsError-";
-    private Date currentDate = new Date();
+
     private Wait<WebDriver> wait;
     public GeneralSelectorActions(){
     }
 
     public void setWebDriver(WebDriver driver){
         this.mainDriver =  driver;
-        logger.info("Driver initialized",mainDriver.toString());
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-    }
-
-    public static Logger getLogger() {
-        return logger;
     }
 
     public Result <Boolean> openPage(String url,String errorCode){
@@ -70,10 +63,6 @@ public class GeneralSelectorActions {
             ErrorLogManager.logError(errorId,e,"Error on waiting WebElement");
             return Result.failure("Element not found: with xpath selector  "+xpathSelector +" after waiting 30 seconds Error Code:"+errorId);
         }
-    }
-
-    public String getDateTime() {
-        return currentDate.toString();
     }
 
     public String getCurrentDate() {
