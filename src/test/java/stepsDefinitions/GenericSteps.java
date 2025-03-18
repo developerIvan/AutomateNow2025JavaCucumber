@@ -4,7 +4,7 @@ import ResultPattern.Result;
 import io.cucumber.java.en.*;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
-
+import utils.ErrorLogManager;
 public class GenericSteps {
 
     public GeneralSelectorActions generalSelectorActions;
@@ -31,10 +31,9 @@ public class GenericSteps {
 
     @When("the user clicks on the {string} link")
     public void userClicksOnTheLink(String linkText) {
-        String errorCode =generalSelectorActions.getUniqueErrorCode( generalSelectorActions.getErrorCode()) + " " + generalSelectorActions.getCurrentDate();
         String errorMessage = "";
         Boolean expecteClickResult = false;
-        Result<Boolean> clickResult = generalSelectorActions.clickElementByXpathText(linkText,errorCode);
+        Result<Boolean> clickResult = generalSelectorActions.clickElementByXpathText(linkText,generalSelectorActions.getErrorCode());
         if(clickResult.isSuccess()){
             expecteClickResult = clickResult.getValue().get();
         }else if(clickResult.isFailure()){
@@ -46,17 +45,37 @@ public class GenericSteps {
 
     @Then("the user validates if the string {string} is visible")
     public void validateStringIsVisible (String stringParam) {
-        String errorCode =generalSelectorActions.getUniqueErrorCode( generalSelectorActions.getErrorCode()) + " " + generalSelectorActions.getCurrentDate();
-        String errorMessage = "";
-        Result<WebElement> elementResult = generalSelectorActions.findElementByXpathText(stringParam,errorCode);
+        String errorMessage = "Element with : "+stringParam + " is found but is not visible";
+        Result<WebElement> elementResult = generalSelectorActions.findElementByExactXpathText(stringParam,generalSelectorActions.getErrorCode());
         Boolean stringIsVisible = false;
 
         if(elementResult.isSuccess()){
+            ErrorLogManager.logInfo("Element found: "+elementResult.getValue().get().toString());
+            ErrorLogManager.logInfo("Element is visible: "+elementResult.getValue().get().isDisplayed());
             stringIsVisible = elementResult.getValue().get().isDisplayed();
+
         }else if(elementResult.isFailure()){
             errorMessage = elementResult.getError().get();
         }
 
         Assert.assertTrue(stringIsVisible, "Element "+stringParam+" not displayed "+errorMessage);
+    }
+
+    @Then("the user scrolls to {string} text")
+    public void theUserScrollsToText(String text) {
+        String errorMessage = "";
+        Result<Boolean> setValueResult = generalSelectorActions.scrollsToText( text, generalSelectorActions.getErrorCode());
+        boolean expectedValue = false;
+        if(setValueResult.isSuccess()){
+            expectedValue = setValueResult.getValue().get();
+        }else{
+            errorMessage = setValueResult.getError().get();
+        }
+        Assert.assertTrue(expectedValue,  errorMessage);
+    }
+
+    @And("^the user waits for (\\d+) seconds$")
+    public void theUserWaitsForSeconds(int seconds) throws InterruptedException {
+       Thread.sleep(seconds*1000);
     }
 }

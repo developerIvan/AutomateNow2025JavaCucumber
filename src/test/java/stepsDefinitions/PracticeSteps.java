@@ -40,4 +40,18 @@ public class PracticeSteps {
 
         Assert.assertTrue(epectedStringIsVisible, "Element "+stringParam+" from page section not displayed, "+errorMessage);
     }
+
+    @When("the user clicks on the button {string} in practice section")
+    public void userClicksOnTheLink(String linkText) {
+        Boolean expectedClickResult = false;
+        String errorMessage = "";
+
+        Result<Boolean> clickResult = practicePage.clickElementByXpathText(linkText,practicePage.getPracticeErrorCode());
+        if(clickResult.isSuccess()){
+            expectedClickResult = clickResult.getValue().get();
+        }else{
+            errorMessage = clickResult.getError().get();
+        }
+        Assert.assertTrue(expectedClickResult, "Error clicking on link: "+linkText+ ":" + errorMessage);
+    }
 }

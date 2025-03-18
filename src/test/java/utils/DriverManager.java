@@ -21,7 +21,7 @@ public class DriverManager {
                     driver.set(new EdgeDriver());
                     break;
                 default:
-                    throw new IllegalArgumentException("Navegador no soportado: " + browser);
+                    throw new IllegalArgumentException("Usuported broswer: " + browser);
             }
             driver.get().manage().window().maximize();
         }

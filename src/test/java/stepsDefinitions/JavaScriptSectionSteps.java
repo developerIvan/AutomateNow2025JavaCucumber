@@ -1,13 +1,11 @@
 package stepsDefinitions;
 
 import PageObjectModel.JavaScriptSection;
-import PageObjectModel.Practice;
 import ResultPattern.Result;
 import io.cucumber.java.en.*;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 
-import java.time.format.DateTimeFormatter;
 
 public class JavaScriptSectionSteps {
     private JavaScriptSection javaScriptSection;
@@ -32,19 +30,7 @@ public class JavaScriptSectionSteps {
         Assert.assertTrue(epectedStringIsVisible, "Element "+stringParam+" from page section not displayed,  "+errorMessage);
     }
 
-    @When("the user clicks on the {string} link in javascript section")
-    public void userClicksOnTheLink(String linkText) {
-        Boolean expectedClickResult = false;
-        String errorMessage = "";
 
-        Result<Boolean> clickResult = javaScriptSection.clickElementByXpathText(linkText,javaScriptSection.getJavaScriptSectionErrorCode());
-        if(clickResult.isSuccess()){
-            expectedClickResult = clickResult.getValue().get();
-        }else{
-            errorMessage = clickResult.getError().get();
-        }
-        Assert.assertTrue(expectedClickResult, "Error clicking on link: "+linkText+ ":" + errorMessage);
-    }
 
     @When("the user clicks on the button with id {string} in javascript section")
     public void userClicksOnTheJavascriptSectionButton(String buttonId) {
@@ -62,4 +48,32 @@ public class JavaScriptSectionSteps {
     }
 
 
+    @Then("the user validates if the delay input contains the value {string}")
+    public void validateDelayInputValue(String expectedValue) {
+        String errorMessage = "";
+        Result<WebElement> delayInputValue = javaScriptSection.findElementBySpecificId(javaScriptSection.getDelayInputId(),javaScriptSection.getJavaScriptSectionErrorCode());
+        String actualValue = "";
+        if(delayInputValue.isSuccess()){
+            actualValue = delayInputValue.getValue().get().getAttribute("value");
+        }else{
+            errorMessage = delayInputValue.getError().get();
+        }
+        Assert.assertEquals(actualValue, expectedValue, "Error validating delay input value: "+errorMessage);
+    }
+
+
+    @And("the user waits for text {string} is visible in the input field after some seconds")
+    public void theUserWaitsForTextIsVisibleInTheInputFieldAfterSomeSeconds(String text) {
+        String errorMessage = "";
+        Result<Boolean> attributeResult = javaScriptSection.waitElementAttributeContainsTheExpectedText("value",text,javaScriptSection.getJavaScriptSectionErrorCode());
+        boolean expectedValue = false;
+
+        if(attributeResult.isFailure()){
+            errorMessage = attributeResult.getError().get();
+        }else{
+            expectedValue = attributeResult.getValue().get();
+        }
+        Assert.assertTrue(expectedValue, "Error waiting for text attribute in input field with id "+javaScriptSection.getDelayInputId()+" contains the expected value "+text+" : "+errorMessage);
+
+    }
 }

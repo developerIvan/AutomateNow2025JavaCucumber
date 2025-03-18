@@ -33,5 +33,10 @@ public class ErrorLogManager {
         logger.error("exception trace: "+e );
     }
 
+    public static void logInfo(String dataToLog) {
+
+        logger.error("Data : "+dataToLog+ " Date:"+ getCurrentDate() +"\n");
+    }
+
 
 }
