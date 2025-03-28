@@ -18,10 +18,6 @@ public class Hooks {
             browserName = "chrome";
         }
         driver = DriverManager.getDriver(browserName.toLowerCase());
-        int availableThreads = Runtime.getRuntime().availableProcessors();
-        System.out.println("Número de núcleos disponibles: " + availableThreads);
-        ErrorLogManager.logInfo("Número de núcleos disponibles: " + availableThreads);
-
     }
 
     public String getSession() {
@@ -36,11 +32,4 @@ public class Hooks {
     public void teardown() {
         DriverManager.quitDriver();
     }
-/*
-    @AfterAll
-    public static void afterAll() {
-        DriverManager.quitDriver();
-    }*/
-
-
 }

@@ -40,14 +40,13 @@
         </dependencies>
     </dependencyManagement>
     <dependencies>
-        <!-- Cucumber Core -->
+
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-java</artifactId>
             <version>${cucumber.version}</version>
         </dependency>
 
-        <!-- Cucumber JUnit -->
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-junit</artifactId>
@@ -55,7 +54,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Selenium WebDriver -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
@@ -67,7 +65,6 @@
             <version>2.18.0</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.testng/testng -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
@@ -79,13 +76,13 @@
             <artifactId>cucumber-testng</artifactId>
             <version>${cucumbertestng.version}</version>
         </dependency>
-        <!-- API de SLF4J -->
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${logger-slf4j-api-version}</version>
         </dependency>
-        <!-- Implementación de Logback -->
+
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
@@ -101,13 +98,11 @@
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-cucumber7-jvm</artifactId>
             <scope>test</scope>
-            <!--      <version>${allure.version}</version>-->
         </dependency>
         <dependency>
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-testng</artifactId>
             <scope>test</scope>
-      <!--      <version>${allure.version}</version>-->
         </dependency>
 
 
@@ -115,7 +110,6 @@
 
     <build>
         <plugins>
-            <!-- Plugin de Maven Compiler -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

@@ -5,15 +5,8 @@ import ResultPattern.Result;
 import io.cucumber.java.en.*;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
-import io.qameta.allure.Allure;
-import org.testng.annotations.Test;
 import utils.ErrorLogManager;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 public class PracticeSteps {
 
     private Practice practicePage;
@@ -25,7 +18,7 @@ public class PracticeSteps {
     }
 
     @Given("User goes to web page {string}")
-    public void userGoesToWebPage(String url) throws IOException {
+    public void userGoesToWebPage(String url) {
         String errorMessage = "";
         boolean pageIsLoaded = false;
         String stepName = "Given User goes to web page";
@@ -58,7 +51,7 @@ public class PracticeSteps {
     }
 
     @When("the user clicks on the button {string} in practice section")
-    public void userClicksOnTheLink(String linkText) throws IOException {
+    public void userClicksOnTheLink(String linkText) {
         Boolean expectedClickResult = false;
         String errorMessage = "";
         String testStepName= "When the user clicks on the button "+linkText+" in practice section";
