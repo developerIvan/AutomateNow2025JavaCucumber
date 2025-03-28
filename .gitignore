@@ -6,5 +6,6 @@
 
 target/
 build/
+allure-report/
 
 .idea/

@@ -15,11 +15,14 @@ import java.util.ArrayList;
 import utils.ErrorLogManager;
 
 public class GeneralSelectorActions {
-    public WebDriver mainDriver;
+    protected WebDriver mainDriver;
     private String errorCode = "GeneralStepsError-";
 
     protected Wait<WebDriver> wait;
     public GeneralSelectorActions(){
+    }
+    public WebDriver getWebDriver(){
+        return mainDriver;
     }
 
     public void setWebDriver(WebDriver driver){
@@ -240,7 +243,8 @@ public class GeneralSelectorActions {
     public Result<String> getAlertText(String errorCode) {
         try {
             Alert alert = mainDriver.switchTo().alert();
-            return Result.success(alert.getText());
+            String actualAlertText = alert.getText();
+            return Result.success(actualAlertText);
         } catch (Exception e) {
             String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
             ErrorLogManager.logError(errorId,e,"Error on scrolling to text");
