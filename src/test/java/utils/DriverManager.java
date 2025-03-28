@@ -5,6 +5,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+
 public class DriverManager {
     private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
@@ -28,10 +29,22 @@ public class DriverManager {
         return driver.get();
     }
 
+    public static String getSessionInfo() {
+       return "Thread ID: " + Thread.currentThread().getName() +
+                " - WebDriver HashCode: " + driver.hashCode();
+    }
+
+    public static void terminateDrivers() {
+
+    }
     public static void quitDriver() {
         if (driver.get() != null) {
-            driver.get().quit();
-            driver.remove();
+            try {
+                driver.get().quit();
+                driver.remove();
+            } catch (Exception e) {
+                ErrorLogManager.logError("Error closing the web Driver: " + e.getMessage(),e,"------Error on closing driver 44545645-------------");
+            }
         }
     }
 }

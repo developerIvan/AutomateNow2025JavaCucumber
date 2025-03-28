@@ -7,7 +7,10 @@ import org.testng.annotations.DataProvider;
 @CucumberOptions(
         features = "src/test/java/features",
         glue = "stepsDefinitions",
-        plugin = {"pretty", "html:target/cucumber-reports.html"},
+        plugin = {
+                "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm",
+                "pretty"
+        },
         monochrome = true,
         tags = "@E2E"
 )

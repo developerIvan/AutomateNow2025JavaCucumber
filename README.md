@@ -19,8 +19,8 @@ This project showcases **automated UI testing** for a web application using **Se
 - **Cucumber (BDD Framework)**
 - **TestNG** (or JUnit)
 - **Maven** (for dependency management)
-- **Extent Reports** (for test reporting)
 - **Git & GitHub** (for version control)
+- **Allure Reports** (for version control)
 
 
 
@@ -38,4 +38,23 @@ This project showcases **automated UI testing** for a web application using **Se
 1. **Run all tests**
    ```sh
    mvn test
+   ```
+
+## 🚀 Reporting
+1.**Install Allure bin lib**
+   ```sh
+   https://allurereport.org/docs/install/
+   ```
+2.**Execute the framework**
+   ```sh
+    mvn clean test
+    ```
+3.**Generate Allure report**
+   ```sh
+     cd target
+     allure generate
+   ```
+4.**Open Allure report**
+   ```sh
+     allure serve
    ```

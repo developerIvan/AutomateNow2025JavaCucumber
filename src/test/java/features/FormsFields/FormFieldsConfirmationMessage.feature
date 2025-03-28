@@ -9,12 +9,12 @@ Feature: Form Fields confirmation message
     And the user enter the password "Test" in the password input field
     And the user select the checkbox value "Water" under the label "What is your favorite drink?"
     And the user select the checkbox value "Blue" under the label "What is your favorite color?"
-    Then the user scrolls to "Do you like automation?" text
+    Then the user scrolls to "Do you like automation?"
     When the user selects the "yes" option in the automation dropdown
     And the user enters the email "jorgematamoros@gmail.com" in the email input field
-    Then the user scrolls to "Message" text
+    When the user scrolls to "Message"
     When the user enters the message "This is a test message" in the message input field
-    Then the user scrolls to "Submit" text
+    When the user scrolls to "Submit"
     And the user waits for 2 seconds
     And the user clicks on the submit button
     Then the user should see the following confirmation message "Message received!"

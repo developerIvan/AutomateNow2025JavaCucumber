@@ -5,6 +5,7 @@ import ResultPattern.Result;
 import io.cucumber.java.en.*;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
+import utils.ErrorLogManager;
 
 
 public class JavaScriptSectionSteps {
@@ -13,6 +14,7 @@ public class JavaScriptSectionSteps {
     public JavaScriptSectionSteps(Hooks configHooks) {
         javaScriptSection = new JavaScriptSection();
         javaScriptSection.setWebDriver(configHooks.getWebDriver());
+        ErrorLogManager.logInfo("GenericSteps driver session " + configHooks.getSession());
     }
 
 
@@ -21,12 +23,16 @@ public class JavaScriptSectionSteps {
     public void validateStringIsVisible (String stringParam) {
         Boolean epectedStringIsVisible = false;
         String errorMessage = "";
+        String stepName= "Then the user validates if Javascript section "+stringParam+" is visible";
         Result<WebElement> element = javaScriptSection.findElementByXpathText(stringParam,javaScriptSection.getJavaScriptSectionErrorCode());
            if(element.isSuccess()){
                 epectedStringIsVisible = element.getValue().get().isDisplayed();
            }else{
                errorMessage = element.getError().get();
            }
+
+
+        ErrorLogManager.saveScreenShotToAllure(stepName,javaScriptSection.getWebDriver());
         Assert.assertTrue(epectedStringIsVisible, "Element "+stringParam+" from page section not displayed,  "+errorMessage);
     }
 
@@ -36,6 +42,7 @@ public class JavaScriptSectionSteps {
     public void userClicksOnTheJavascriptSectionButton(String buttonId) {
         String errorMessage = "";
         Result<Boolean> clickResult = javaScriptSection.clickElementById(buttonId,javaScriptSection.getJavaScriptSectionErrorCode());
+        String stepName = "When the user clicks on the button with id "+buttonId+" in javascript section";
         boolean expectedValue = true;
         if(clickResult.isFailure()){
             errorMessage = clickResult.getError().get();
@@ -43,7 +50,7 @@ public class JavaScriptSectionSteps {
         }else{
             expectedValue = clickResult.getValue().get();
         }
-
+        ErrorLogManager.saveScreenShotToAllure(stepName,javaScriptSection.getWebDriver());
         Assert.assertTrue(expectedValue, "Error clicking on link " + errorMessage);
     }
 
@@ -51,6 +58,7 @@ public class JavaScriptSectionSteps {
     @Then("the user validates if the delay input contains the value {string}")
     public void validateDelayInputValue(String expectedValue) {
         String errorMessage = "";
+        String stepName = "Then the user validates if the delay input contains the value "+expectedValue;
         Result<WebElement> delayInputValue = javaScriptSection.findElementBySpecificId(javaScriptSection.getDelayInputId(),javaScriptSection.getJavaScriptSectionErrorCode());
         String actualValue = "";
         if(delayInputValue.isSuccess()){
@@ -58,6 +66,7 @@ public class JavaScriptSectionSteps {
         }else{
             errorMessage = delayInputValue.getError().get();
         }
+        ErrorLogManager.saveScreenShotToAllure(stepName,javaScriptSection.getWebDriver());
         Assert.assertEquals(actualValue, expectedValue, "Error validating delay input value: "+errorMessage);
     }
 
@@ -67,12 +76,13 @@ public class JavaScriptSectionSteps {
         String errorMessage = "";
         Result<Boolean> attributeResult = javaScriptSection.waitElementAttributeContainsTheExpectedText("value",text,javaScriptSection.getJavaScriptSectionErrorCode());
         boolean expectedValue = false;
-
+        String stepName = "And the user waits for text "+text+" is visible in the input field after some seconds";
         if(attributeResult.isFailure()){
             errorMessage = attributeResult.getError().get();
         }else{
             expectedValue = attributeResult.getValue().get();
         }
+        ErrorLogManager.saveScreenShotToAllure(stepName,javaScriptSection.getWebDriver());
         Assert.assertTrue(expectedValue, "Error waiting for text attribute in input field with id "+javaScriptSection.getDelayInputId()+" contains the expected value "+text+" : "+errorMessage);
 
     }
