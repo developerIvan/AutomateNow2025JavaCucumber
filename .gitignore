@@ -7,5 +7,7 @@
 target/
 build/
 allure-report/
+allure-report/data/
+.allure/
 
 .idea/

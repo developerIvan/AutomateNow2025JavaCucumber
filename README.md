@@ -41,20 +41,16 @@ This project showcases **automated UI testing** for a web application using **Se
    ```
 
 ## 🚀 Reporting
-1.**Install Allure bin lib**
-   ```sh
-   https://allurereport.org/docs/install/
-   ```
-2.**Execute the framework**
+
+1.**Execute the framework**
    ```sh
     mvn clean test
     ```
 3.**Generate Allure report**
    ```sh
-     cd target
-     allure generate
+      mvn allure:report   
    ```
 4.**Open Allure report**
    ```sh
-     allure serve
+     mvn allure:serve
    ```

@@ -14,10 +14,12 @@ public class Hooks {
     @Before
     public void setup() {
         String browserName = System.getenv("browserName");
+        String browserHeight = System.getenv("browserHeight");
+        String browserWidth = System.getenv("browserWidth");
         if (browserName == null) {
             browserName = "chrome";
         }
-        driver = DriverManager.getDriver(browserName.toLowerCase());
+        driver = DriverManager.getDriver(browserName.toLowerCase(), browserHeight.toLowerCase(), browserWidth.toLowerCase());
     }
 
     public String getSession() {
