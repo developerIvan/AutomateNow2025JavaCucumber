@@ -3,14 +3,14 @@ name: Run Selenium Tests with Headless Chrome #wrokflow name
 on: # Defines the events that will trigger the GitHub action (push)
   schedule:
     - cron: '0 4 * * *'
- 
+env:
+  BROWSERNAME: chrome
 jobs:
   test:
     runs-on: ubuntu-latest  
     env:
-      browserName: chrome,
-      browserHeight: 1920,
-      browserWidth:  1080
+      BROWSERHEIGTH: 1920,
+      BROWSERWIDTH:  1080
           
           
     steps: # contains the actions/tasks to be executed
@@ -28,7 +28,10 @@ jobs:
 
       - name: 🏗 Install Maven dependencies
         run: mvn clean install -DskipTests
-
+      
+      - name: Env varialbes
+        run: echo "This are the env variables $BROWSERNAME $BROWSERHEIGTH and $BROWSERWIDTH "
+        
       - name: 🧪 Run Tests
         run: mvn test
 
