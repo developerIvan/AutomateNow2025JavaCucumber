@@ -1,0 +1,38 @@
+name: Run Selenium Tests with Headless Chrome #wrokflow name
+
+on: # Defines the events that will trigger the GitHub action (push)
+  schedule:
+    - cron: '30 18 * * *'
+    
+
+jobs: #Steps
+  test:
+    runs-on: ubuntu-latest  # También puedes usar windows-latest
+
+    steps: # contains the actions/tasks to be executed
+      - name: 🛠 Checkout repo
+        uses: actions/checkout@v4 #Defines the actions to be used, gernerally are the same from github
+        
+      - name: 🔧 Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: 🚀 Set up Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: 🏗 Install Maven dependencies
+        run: mvn clean install -DskipTests
+
+      - name: 🧪 Run Tests
+        run: mvn test
+
+      - name: 📊 Generate Allure Report
+        run: mvn allure:report
+
+      - name: 📤 Upload Allure Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: target/allure-results
