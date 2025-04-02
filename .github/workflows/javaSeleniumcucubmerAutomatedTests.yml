@@ -8,7 +8,7 @@ jobs:
   test:
     runs-on: ubuntu-latest  
     env:
-      browserName: firefox,
+      browserName: chrome,
       browserHeight: 1920,
       browserWidth:  1080
           
