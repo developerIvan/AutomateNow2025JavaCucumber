@@ -2,11 +2,17 @@ name: Run Selenium Tests with Headless Chrome #wrokflow name
 
 on: # Defines the events that will trigger the GitHub action (push)
   schedule:
-    - cron: '0 2 * * *'
+    - cron: '0 4 * * *'
+ 
 jobs:
   test:
-    runs-on: ubuntu-latest  # También puedes usar windows-latest
-
+    runs-on: ubuntu-latest  
+    env:
+      browserName: firefox,
+      browserHeight: 1920,
+      browserWidth:  1080
+          
+          
     steps: # contains the actions/tasks to be executed
       - name: 🛠 Checkout repo
         uses: actions/checkout@v4 #Defines the actions to be used, gernerally are the same from github
