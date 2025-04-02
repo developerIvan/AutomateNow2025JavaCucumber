@@ -13,24 +13,24 @@ jobs:
       BROWSERWIDTH:  1080
           
           
-   # steps: # contains the actions/tasks to be executed
-   #   - name: 🛠 Checkout repo
-   #     uses: actions/checkout@v4 #Defines the actions to be used, gernerally are the same from github
-        
-   #   - name: 🔧 Set up JDK 17
-   #     uses: actions/setup-java@v3
-   #     with:
-   #       distribution: 'temurin'
-   #       java-version: '17'
+    steps: # contains the actions/tasks to be executed
+     - name: 🛠 Checkout repo
+       uses: actions/checkout@v4 #Defines the actions to be used, gernerally are the same from github
+     
+     - name: 🔧 Set up JDK 17
+       uses: actions/setup-java@v3
+       with:
+          distribution: 'temurin'
+          java-version: '17'
 
-   #   - name: 🚀 Set up Chrome
-   #     uses: browser-actions/setup-chrome@v1
+     - name: 🚀 Set up Chrome
+       uses: browser-actions/setup-chrome@v1
 
-   #   - name: 🏗 Install Maven dependencies
-   #     run: mvn clean install -DskipTests
+     - name: 🏗 Install Maven dependencies
+       run: mvn clean install -DskipTests
       
-   #   - name: Env varialbes
-   #     run: echo "This are the env variables $BROWSERNAME $BROWSERHEIGTH and $BROWSERWIDTH "
+     - name: Env varialbes
+       run: echo "This are the env variables $BROWSERNAME $BROWSERHEIGTH and $BROWSERWIDTH "
         
    #   - name: 🧪 Run Tests
    #     run: mvn test
