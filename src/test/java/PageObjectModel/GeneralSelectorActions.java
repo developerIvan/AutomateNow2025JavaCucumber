@@ -119,17 +119,9 @@ public class GeneralSelectorActions {
         }
     }
 
-    public String getCurrentDate() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDateTime now = LocalDateTime.now();
-        return now.format(formatter);
-    }
-
     public String getErrorCode() {
         return errorCode;
     }
-
-
 
     public Result<WebElement> findElementBySpecificId(String IdParam,String errorCodeParam) {
         try {

@@ -22,6 +22,8 @@
         <pi-container-version>7.21.1</pi-container-version>
         <allure.version>2.29.1</allure.version>
         <aspectj.version>1.9.20.1</aspectj.version>
+        <commons-io-version>2.18.0</commons-io-version>
+        <dot-env-java>2.2.0</dot-env-java>
     </properties>
 
 
@@ -62,9 +64,13 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.18.0</version>
+            <version>${commons-io-version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>io.github.cdimascio</groupId>
+            <artifactId>dotenv-java</artifactId>
+            <version>${dot-env-java}</version>
+        </dependency>
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
