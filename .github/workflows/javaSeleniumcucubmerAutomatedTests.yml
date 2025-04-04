@@ -2,7 +2,7 @@ name: Run Selenium Tests with Headless Chrome #wrokflow name
 
 on: # Defines the events that will trigger the GitHub action (push)
   schedule:
-    - cron: '00 21 * * *'
+    - cron: '00 23 * * *'
 
   
 jobs:
@@ -50,10 +50,18 @@ jobs:
        run: mvn test
 
      - name: 📊 Generate Allure Report
+       if: always()
        run: mvn allure:report
 
      - name: 📤 Upload Allure Results
+       if: always()
        uses: actions/upload-artifact@v4
        with:
           name: allure-results
           path: target/allure-results
+     - name: Upload log file
+       if: always()
+       uses: actions/upload-artifact@v4
+       with:
+         name: automation.log
+         path: /logs/automation.log    
