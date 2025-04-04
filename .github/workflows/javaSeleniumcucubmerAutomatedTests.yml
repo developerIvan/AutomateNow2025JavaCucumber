@@ -2,7 +2,7 @@ name: Run Selenium Tests with Headless Chrome #wrokflow name
 
 on: # Defines the events that will trigger the GitHub action (push)
   schedule:
-    - cron: '0 19 * * *'
+    - cron: '10 19 * * *'
 env:
   BROWSERNAME: chrome
 jobs:
@@ -32,8 +32,7 @@ jobs:
      - name: Env variables
        run: echo "This are the env variables $BROWSERNAME $BROWSERHEIGTH and $BROWSERWIDTH  This is the current dir $GITHUB_WORKSPACE" 
 
-     - name: file list
-       run:  ls 
+     
        
      - name: Create env file  
        run: 
@@ -41,7 +40,10 @@ jobs:
           echo browserName=$BROWSERNAME >> .env
           echo browserHeight=$BROWSERHEIGTH >> .env
           echo browserWidth=$BROWSERWIDTH  >> .env
-          cat .env  
+          cat .env
+          
+     - name: file list
+       run:  ls -la     
        
      - name: 🧪 Run Tests
        run: mvn test
