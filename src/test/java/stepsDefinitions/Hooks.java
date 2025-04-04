@@ -8,14 +8,17 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterSuite;
 import utils.DriverManager;
 import utils.ErrorLogManager;
+import io.github.cdimascio.dotenv.Dotenv;
 
 public class Hooks {
     private WebDriver driver;
     @Before
     public void setup() {
-        String browserName = System.getenv("browserName");
-        String browserHeight = System.getenv("browserHeight");
-        String browserWidth = System.getenv("browserWidth");
+        Dotenv dotenv = Dotenv.load();
+        String browserName = dotenv.get("browserName");
+        String browserHeight =  dotenv.get("browserHeight");
+        String browserWidth =  dotenv.get("browserWidth");
+
         if (browserName == null) {
             browserName = "chrome";
         }
