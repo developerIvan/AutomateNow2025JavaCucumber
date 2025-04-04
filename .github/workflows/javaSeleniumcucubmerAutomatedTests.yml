@@ -31,6 +31,9 @@ jobs:
       
      - name: Env variables
        run: echo "This are the env variables $BROWSERNAME $BROWSERHEIGTH and $BROWSERWIDTH  This is the current dir $GITHUB_WORKSPACE" 
+
+     - name: file list
+       run:  ls 
        
      - name: Create env file  
        run: 
