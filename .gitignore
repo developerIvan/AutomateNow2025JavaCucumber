@@ -3,7 +3,7 @@
 *.log
 *.tmp
 *.swp
-
+.env
 target/
 build/
 allure-report/
