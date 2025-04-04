@@ -36,17 +36,17 @@ jobs:
      - name: 🏗 Install Maven dependencies
        run: mvn clean install -DskipTests
       
-     - name: Env varialbes
+     - name: Env variables
        run: echo "This are the env variables $BROWSERNAME $BROWSERHEIGTH and $BROWSERWIDTH "
         
-   #   - name: 🧪 Run Tests
-   #     run: mvn test
+     - name: 🧪 Run Tests
+       run: mvn test
 
-   #   - name: 📊 Generate Allure Report
-   #     run: mvn allure:report
+     - name: 📊 Generate Allure Report
+       run: mvn allure:report
 
-   #   - name: 📤 Upload Allure Results
-   #     uses: actions/upload-artifact@v4
-   #     with:
-   #       name: allure-results
+     - name: 📤 Upload Allure Results
+       uses: actions/upload-artifact@v4
+       with:
+          name: allure-results
    #       path: target/allure-results
