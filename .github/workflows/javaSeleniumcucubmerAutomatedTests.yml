@@ -2,7 +2,7 @@ name: Run Selenium Tests with Headless Chrome #wrokflow name
 
 on:
   schedule:
-    - cron: '00 22 * * *'
+    - cron: '15 23 * * *'
 
   
 jobs:
@@ -50,14 +50,14 @@ jobs:
        uses: actions/upload-artifact@v4
        with:
           name: allure-results-report
-          path: pwd && target/site
+          path: ${GITHUB_WORKSPACE}/target/site
           
      - name: 📤 Upload Allure Results
        if: always()
        uses: actions/upload-artifact@v4
        with:
           name: allure-results
-          path: pwd && target/allure-results
+          path: ${GITHUB_WORKSPACE}/target/allure-results
           
      - name: Upload log file
        if: always()
