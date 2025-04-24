@@ -120,7 +120,8 @@ public class FormFieldSteps {
         }else{
             errorMessage = clickResult.getError().get();
         }
-        ErrorLogManager.saveScreenShotToAllure(stepName,formFieldsSection.getWebDriver());
+
+      //  ErrorLogManager.saveScreenShotToAllure(stepName,formFieldsSection.getWebDriver());
         Assert.assertTrue(expectedValue,  errorMessage);
 
     }
@@ -139,6 +140,13 @@ public class FormFieldSteps {
         ErrorLogManager.saveScreenShotToAllure(stepName,formFieldsSection.getWebDriver());
         Assert.assertEquals(actualMessage, message, errorMessage);
     }
+
+    @Then("the user validates if the form page displays the expected text {string}")
+    public void validateIfFormPageContainsTehExpectedText(String message) {
+        String stepName = "Then the user validates if form page display the expected text "+message;
+        this.genericSteps.validateStringIsVisible(message,stepName);
+    }
+
 
     @And("^the user waits for (\\d+) seconds$")
     public void theUserWaitsForSeconds(int seconds) throws InterruptedException {

@@ -19,6 +19,7 @@ public class GeneralSelectorActions {
     private String errorCode = "GeneralStepsError-";
 
     protected Wait<WebDriver> wait;
+
     public GeneralSelectorActions(){
     }
     public WebDriver getWebDriver(){
@@ -234,8 +235,10 @@ public class GeneralSelectorActions {
 
     public Result<String> getAlertText(String errorCode) {
         try {
-            Alert alert = mainDriver.switchTo().alert();
-            String actualAlertText = alert.getText();
+            String actualAlertText ="";
+            Alert alert = this.mainDriver.switchTo().alert();
+            actualAlertText = alert.getText();
+            alert.dismiss();
             return Result.success(actualAlertText);
         } catch (Exception e) {
             String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
@@ -243,5 +246,6 @@ public class GeneralSelectorActions {
             return Result.failure("No alert present, error code: "+errorId);
         }
     }
+
 
 }

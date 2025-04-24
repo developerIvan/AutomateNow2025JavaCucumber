@@ -42,22 +42,17 @@ This project showcases **automated UI testing** for a web application using **Se
   browserWidth=desired width, eg, example 1080
   ```
 ## 🚀 Running the Tests
-1. **Run all tests**
-   ```sh
-   mvn test
-   ```
-
-## 🚀 Reporting
 
 1.**Execute the framework**
    ```sh
     mvn clean test
     ```
-3.**Generate Allure report**
+## 🚀 Reporting    
+1.**Generate Allure report**
    ```sh
       mvn allure:report   
    ```
-4.**Open Allure report**
+2.**Open Allure report**
    ```sh
      mvn allure:serve
    ```

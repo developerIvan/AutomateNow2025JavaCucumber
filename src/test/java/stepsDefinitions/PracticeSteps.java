@@ -10,10 +10,11 @@ import utils.ErrorLogManager;
 public class PracticeSteps {
 
     private Practice practicePage;
-
+    private GenericSteps genericSteps;
     public PracticeSteps(Hooks configHooks) {
         practicePage = new Practice();
         practicePage.setWebDriver(configHooks.getWebDriver());
+        genericSteps = new GenericSteps(practicePage.getWebDriver());
         ErrorLogManager.logInfo("GenericSteps driver session " + configHooks.getSession());
     }
 
@@ -34,20 +35,10 @@ public class PracticeSteps {
     }
 
     @Then("the user validates if section {string} from Practice page is visible")
-    public void validateStringIsVisible (String stringParam) {
-        String errorMessage = "";
-        Result<WebElement> element = practicePage.findElementByXpathText(stringParam,practicePage.getPracticeErrorCode());
-        Boolean epectedStringIsVisible = false;
+    public void validateSectionIsVisible (String stringParam) {
         String testStepName = "Then the user validates if section "+stringParam+" from Practice page is visible";
-        if(element.isSuccess()){
-            epectedStringIsVisible = element.getValue().get().isDisplayed();
-        }else if(element.isFailure()){
-            errorMessage = element.getError().get();
-        }
-        ErrorLogManager.saveScreenShotToAllure(testStepName,practicePage.getWebDriver());
+        this.genericSteps.validateStringIsVisible(stringParam,testStepName);
 
-
-        Assert.assertTrue(epectedStringIsVisible, "Element "+stringParam+" from page section not displayed, "+errorMessage);
     }
 
     @When("the user clicks on the button {string} in practice section")
@@ -63,5 +54,11 @@ public class PracticeSteps {
         }
         ErrorLogManager.saveScreenShotToAllure(testStepName,practicePage.getWebDriver());
         Assert.assertTrue(expectedClickResult, "Error clicking on link: "+linkText+ ":" + errorMessage);
+    }
+
+    @Then("the user validates if the welcome message {string} is visible")
+    public void validateIfWelcomeStringIsVisible (String stringParam) {
+       String testSteps =  "the user validates if the welcome message "+stringParam+" is visible";
+       this.genericSteps.validateStringIsVisible(stringParam,testSteps);
     }
 }
