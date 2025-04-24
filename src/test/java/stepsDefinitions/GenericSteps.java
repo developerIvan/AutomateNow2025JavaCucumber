@@ -57,14 +57,11 @@ public class GenericSteps {
     }
 
     @Then("the user validates if the string {string} is visible")
-    public void validateStringIsVisible (String stringParam) {
+    public void validateStringIsVisible (String stringParam, String stepName) {
         String errorMessage = "Element with : "+stringParam + " is found but is not visible";
         Result<WebElement> elementResult = generalSelectorActions.findElementByExactXpathText(stringParam,generalSelectorActions.getErrorCode());
         Boolean stringIsVisible = false;
-        String stepName = "Then the user validates if the string "+stringParam+" is visible";
         if(elementResult.isSuccess()){
-            ErrorLogManager.logInfo("Element found: "+elementResult.getValue().get().toString());
-            ErrorLogManager.logInfo("Element is visible: "+elementResult.getValue().get().isDisplayed());
             stringIsVisible = elementResult.getValue().get().isDisplayed();
 
         }else if(elementResult.isFailure()){
@@ -73,6 +70,8 @@ public class GenericSteps {
         ErrorLogManager.saveScreenShotToAllure(stepName);
         Assert.assertTrue(stringIsVisible, "Element "+stringParam+" not displayed "+errorMessage);
     }
+
+
 
 
 

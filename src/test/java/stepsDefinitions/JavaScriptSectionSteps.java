@@ -10,10 +10,11 @@ import utils.ErrorLogManager;
 
 public class JavaScriptSectionSteps {
     private JavaScriptSection javaScriptSection;
-
+    private GenericSteps genericSteps;
     public JavaScriptSectionSteps(Hooks configHooks) {
         javaScriptSection = new JavaScriptSection();
         javaScriptSection.setWebDriver(configHooks.getWebDriver());
+        genericSteps = new GenericSteps(javaScriptSection.getWebDriver());
         ErrorLogManager.logInfo("GenericSteps driver session " + configHooks.getSession());
     }
 
@@ -55,14 +56,14 @@ public class JavaScriptSectionSteps {
     }
 
 
-    @Then("the user validates if the delay input contains the value {string}")
+    @Then("the user validates if the element div contains the value {string}")
     public void validateDelayInputValue(String expectedValue) {
         String errorMessage = "";
         String stepName = "Then the user validates if the delay input contains the value "+expectedValue;
         Result<WebElement> delayInputValue = javaScriptSection.findElementBySpecificId(javaScriptSection.getDelayInputId(),javaScriptSection.getJavaScriptSectionErrorCode());
         String actualValue = "";
         if(delayInputValue.isSuccess()){
-            actualValue = delayInputValue.getValue().get().getAttribute("value");
+            actualValue = delayInputValue.getValue().get().getAttribute("textContent");
         }else{
             errorMessage = delayInputValue.getError().get();
         }
@@ -74,7 +75,7 @@ public class JavaScriptSectionSteps {
     @And("the user waits for text {string} is visible in the input field after some seconds")
     public void theUserWaitsForTextIsVisibleInTheInputFieldAfterSomeSeconds(String text) {
         String errorMessage = "";
-        Result<Boolean> attributeResult = javaScriptSection.waitElementAttributeContainsTheExpectedText("value",text,javaScriptSection.getJavaScriptSectionErrorCode());
+        Result<Boolean> attributeResult = javaScriptSection.waitElementAttributeContainsTheExpectedText("textContent",text,javaScriptSection.getJavaScriptSectionErrorCode());
         boolean expectedValue = false;
         String stepName = "And the user waits for text "+text+" is visible in the input field after some seconds";
         if(attributeResult.isFailure()){
@@ -85,5 +86,10 @@ public class JavaScriptSectionSteps {
         ErrorLogManager.saveScreenShotToAllure(stepName,javaScriptSection.getWebDriver());
         Assert.assertTrue(expectedValue, "Error waiting for text attribute in input field with id "+javaScriptSection.getDelayInputId()+" contains the expected value "+text+" : "+errorMessage);
 
+    }
+    @Then("the user validates if the string {string} in javascript section is visible")
+    public void validatesIfExpectedTextInJavascriptSectionIsVisible(String expectedText){
+        String stepName = "the user validates if the string  "+expectedText+" in javascript section is visible";
+        this.genericSteps.validateStringIsVisible(expectedText,stepName);
     }
 }
