@@ -40,8 +40,6 @@ This project showcases **automated UI testing** for a web application using **Se
   browserName=firefox
   browserHeight= desired heigth, eg, example 1920
   browserWidth=desired width, eg, example 1080
-  BASE_URL=http://example.com
-  BROWSER=browser name e,g chrome
   ```
 ## 🚀 Running the Tests
 1. **Run all tests**
