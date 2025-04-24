@@ -2,7 +2,7 @@ name: Run Selenium Tests with Headless Chrome #wrokflow name
 
 on:
   schedule:
-    - cron: '32 23 * * *'
+    - cron: '32 01 * * *'
 
   
 jobs:
