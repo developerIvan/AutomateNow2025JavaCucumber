@@ -56,9 +56,11 @@ public class Hooks {
     }
 
     @After
-    public void teardown(Scenario scenario) throws Exception {
+    public void teardown() throws Exception {
+         screenRecorder.stopRecord();
           DriverManager.quitDriver();
-          screenRecorder.stopRecord();
+
+
       //  screenRecorder.combineFramesToVideo(finalPath.toString(), scenarioName+".mp4");
      //   DriverManager.stopRecording();
 
