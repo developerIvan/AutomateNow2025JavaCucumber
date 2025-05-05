@@ -26,12 +26,10 @@ public class GenericSteps {
         ErrorLogManager.setWebDriver(driver);
         ErrorLogManager.logInfo("GenericSteps driver session " + driver);
     }
-    @And("the user waits for text {string} to be visible")
-    public void userWaitsForTextToBeVisible(String text) {
+    public void userWaitsForTextToBeVisible(String text,String stepName) {
         String errorMessage = "";
         Result<WebElement> elementIsVisible = generalSelectorActions.waitElementByXpathText(text,generalSelectorActions.getErrorCode());
         Boolean expectedTextIsVisible = false;
-        String stepName = "And the user waits for text to be visible "+text;
         if(elementIsVisible.isSuccess()){
             expectedTextIsVisible = elementIsVisible.getValue().get().isDisplayed();
         }else if(elementIsVisible.isFailure()){
@@ -84,7 +82,7 @@ public class GenericSteps {
         }else{
             errorMessage = setValueResult.getError().get();
         }
-        ErrorLogManager.saveScreenShotToAllure(stepName);
+   //     ErrorLogManager.saveScreenShotToAllure(stepName);
         Assert.assertTrue(expectedValue,  errorMessage);
     }
 

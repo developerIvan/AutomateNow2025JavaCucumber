@@ -3,8 +3,13 @@ package stepsDefinitions;
 import PageObjectModel.FormFieldsSection;
 import ResultPattern.Result;
 import io.cucumber.java.en.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import utils.ErrorLogManager;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.interactions.WheelInput;
 
 public class FormFieldSteps {
     private FormFieldsSection formFieldsSection;
@@ -68,6 +73,10 @@ public class FormFieldSteps {
     public void theUserSelectsTheOptionInTheAutomationDropdown(String option) {
         String errorMessage = "";
         String stepName = "When the user selects the "+option+" option in the automation dropdown";
+        String dropdownLabelText = "Automation tools";
+     //   this.genericSteps.theUserScrollsToText(dropdownLabelText,stepName);
+     //   ((JavascriptExecutor) this.formFieldsSection.getWebDriver()).executeScript("arguments[0].scrollIntoView(true);", this.formFieldsSection.getWebDriver().findElement(By.cssSelector(formFieldsSection.getAutomationDropdownCssSelectorId())));
+
         Result<Boolean> setValueResult = formFieldsSection.chooseOptionFromSelectWebElement(formFieldsSection.getAutomationDropdownCssSelectorId(), option, formFieldsSection.getFormFieldsSectionErrorCode());
         boolean expectedValue = false;
         if(setValueResult.isSuccess()){
@@ -151,6 +160,12 @@ public class FormFieldSteps {
     @And("^the user waits for (\\d+) seconds$")
     public void theUserWaitsForSeconds(int seconds) throws InterruptedException {
         Thread.sleep(seconds*1000);
+    }
+
+    @And("the user waits for the text {string} to be displayed in form section")
+    public void theUserWaitsForTextIsVisible(String text) throws InterruptedException {
+        String stepName = "the user waits for the text "+text+" to be displayed in form section";
+        this.genericSteps.userWaitsForTextToBeVisible(text,stepName);
     }
 
     @When("the user scrolls to {string}")

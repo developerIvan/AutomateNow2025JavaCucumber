@@ -61,4 +61,10 @@ public class PracticeSteps {
        String testSteps =  "the user validates if the welcome message "+stringParam+" is visible";
        this.genericSteps.validateStringIsVisible(stringParam,testSteps);
     }
+
+    @And("the user waits for text {string} to be visible in Practice Section")
+    public void waitsForTextTobeVisibleInPracticeSection (String stringParam) {
+        String testSteps =  "the user validates if the welcome message "+stringParam+" is visible";
+        this.genericSteps.userWaitsForTextToBeVisible(stringParam,testSteps);
+    }
 }
