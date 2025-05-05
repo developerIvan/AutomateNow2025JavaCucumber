@@ -217,7 +217,7 @@ public class GeneralSelectorActions {
         } catch (Exception e) {
             String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
             ErrorLogManager.logError(errorId,e,"Error on selecting option from select");
-            return Result.failure("Error selecting option from select using selector: "+selectCssSelector+" with value"+optionValue+" error code: "+errorId);
+            return Result.failure("Error selecting option from select using selector: "+selectCssSelector+" with value: "+optionValue+" error code: "+errorId);
         }
     }
 

@@ -92,4 +92,10 @@ public class JavaScriptSectionSteps {
         String stepName = "the user validates if the string  "+expectedText+" in javascript section is visible";
         this.genericSteps.validateStringIsVisible(expectedText,stepName);
     }
+
+    @And("the user waits for text {string} to be visible in Javascript section")
+    public void waitIfTextIsVisibleInJavascriptSection(String expectedText){
+        String stepName = "the user validates if the string  "+expectedText+" in javascript section is visible";
+        this.genericSteps.userWaitsForTextToBeVisible(expectedText,stepName);
+    }
 }
