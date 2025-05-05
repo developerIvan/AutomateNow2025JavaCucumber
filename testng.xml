@@ -3,7 +3,6 @@
 
 <suite name="CucumberSuit" verbose="1" parallel="tests" data-provider-thread-count="2">
     <test name="CucumberTest">
-        <parameter name="browser" value="chrome"/>
         <classes>
             <class name="runners.CucumberTestNGE2ERunner"/>
         </classes>

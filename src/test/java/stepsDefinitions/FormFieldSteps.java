@@ -18,7 +18,6 @@ public class FormFieldSteps {
         formFieldsSection = new FormFieldsSection();
         formFieldsSection.setWebDriver(configHooks.getWebDriver());
         genericSteps = new GenericSteps(formFieldsSection.getWebDriver());
-        ErrorLogManager.logInfo("FormFieldsSectionSteps driver session " + configHooks.getSession());
     }
 
     @And("the user enter the password {string} in the password input field")
@@ -153,7 +152,7 @@ public class FormFieldSteps {
     @Then("the user validates if the form page displays the expected text {string}")
     public void validateIfFormPageContainsTehExpectedText(String message) {
         String stepName = "Then the user validates if form page display the expected text "+message;
-        this.genericSteps.validateStringIsVisible(message,stepName);
+        this.genericSteps.validateStringIsVisible(message);
     }
 
 
@@ -168,9 +167,5 @@ public class FormFieldSteps {
         this.genericSteps.userWaitsForTextToBeVisible(text,stepName);
     }
 
-    @When("the user scrolls to {string}")
-    public void theUserScrollsTo(String text) {
-        String stepName = "When the user scrolls to "+text;
-        this.genericSteps.theUserScrollsToText(text,stepName);
-    }
+
 }

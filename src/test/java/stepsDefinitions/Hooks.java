@@ -6,12 +6,14 @@ import io.cucumber.java.Before;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterSuite;
-import utils.DriverManager;
+import utils.DynamicDriverManager;
 import utils.ErrorLogManager;
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class Hooks {
     private WebDriver driver;
+
+    private DynamicDriverManager driverManager = new DynamicDriverManager();
     @Before
     public void setup() {
         Dotenv dotenv = Dotenv.load();
@@ -22,12 +24,9 @@ public class Hooks {
         if (browserName == null) {
             browserName = "chrome";
         }
-        driver = DriverManager.getDriver(browserName.toLowerCase(), browserHeight.toLowerCase(), browserWidth.toLowerCase());
+        driver = driverManager.getDriver(browserName.toLowerCase(), browserHeight.toLowerCase(), browserWidth.toLowerCase());
     }
 
-    public String getSession() {
-        return DriverManager.getSessionInfo();
-    }
 
     public WebDriver getWebDriver(){
         return driver;
@@ -35,6 +34,6 @@ public class Hooks {
 
     @After
     public void teardown() {
-        DriverManager.quitDriver();
+        driverManager .quitDriver();
     }
 }

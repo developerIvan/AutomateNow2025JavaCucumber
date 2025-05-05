@@ -15,7 +15,6 @@ public class PracticeSteps {
         practicePage = new Practice();
         practicePage.setWebDriver(configHooks.getWebDriver());
         genericSteps = new GenericSteps(practicePage.getWebDriver());
-        ErrorLogManager.logInfo("GenericSteps driver session " + configHooks.getSession());
     }
 
     @Given("User goes to web page {string}")
@@ -37,7 +36,7 @@ public class PracticeSteps {
     @Then("the user validates if section {string} from Practice page is visible")
     public void validateSectionIsVisible (String stringParam) {
         String testStepName = "Then the user validates if section "+stringParam+" from Practice page is visible";
-        this.genericSteps.validateStringIsVisible(stringParam,testStepName);
+        this.genericSteps.validateStringIsVisible(stringParam);
 
     }
 
@@ -59,7 +58,7 @@ public class PracticeSteps {
     @Then("the user validates if the welcome message {string} is visible")
     public void validateIfWelcomeStringIsVisible (String stringParam) {
        String testSteps =  "the user validates if the welcome message "+stringParam+" is visible";
-       this.genericSteps.validateStringIsVisible(stringParam,testSteps);
+       this.genericSteps.validateStringIsVisible(stringParam);
     }
 
     @And("the user waits for text {string} to be visible in Practice Section")

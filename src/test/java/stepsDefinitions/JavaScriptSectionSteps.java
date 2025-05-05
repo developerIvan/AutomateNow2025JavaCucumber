@@ -15,7 +15,6 @@ public class JavaScriptSectionSteps {
         javaScriptSection = new JavaScriptSection();
         javaScriptSection.setWebDriver(configHooks.getWebDriver());
         genericSteps = new GenericSteps(javaScriptSection.getWebDriver());
-        ErrorLogManager.logInfo("GenericSteps driver session " + configHooks.getSession());
     }
 
 
@@ -90,12 +89,12 @@ public class JavaScriptSectionSteps {
     @Then("the user validates if the string {string} in javascript section is visible")
     public void validatesIfExpectedTextInJavascriptSectionIsVisible(String expectedText){
         String stepName = "the user validates if the string  "+expectedText+" in javascript section is visible";
-        this.genericSteps.validateStringIsVisible(expectedText,stepName);
+        this.genericSteps.validateStringIsVisible(expectedText);
     }
 
     @And("the user waits for text {string} to be visible in Javascript section")
     public void waitIfTextIsVisibleInJavascriptSection(String expectedText){
         String stepName = "the user validates if the string  "+expectedText+" in javascript section is visible";
-        this.genericSteps.userWaitsForTextToBeVisible(expectedText,stepName);
+        this.genericSteps.userWaitsForTextToBeVisible(expectedText,"");
     }
 }
