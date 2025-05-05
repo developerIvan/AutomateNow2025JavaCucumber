@@ -13,7 +13,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <cucumber.version>7.21.1</cucumber.version>
-        <selenium.version>4.11.0</selenium.version>
+        <selenium.version>4.31.0</selenium.version>
         <junit.version>5.9.2</junit.version>
         <testng.version>7.11.0</testng.version>
         <cucumbertestng.version>7.21.1</cucumbertestng.version>
@@ -24,6 +24,8 @@
         <aspectj.version>1.9.20.1</aspectj.version>
         <commons-io-version>2.18.0</commons-io-version>
         <dot-env-java>2.2.0</dot-env-java>
+        <selenium-devtools-v121-ver>4.19.1</selenium-devtools-v121-ver>
+        <selenium-devtools-v119-ver>4.18.0</selenium-devtools-v119-ver>
     </properties>
 
 
@@ -61,6 +63,13 @@
             <artifactId>selenium-java</artifactId>
             <version>${selenium.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-devtools-v135</artifactId>
+            <version>${selenium.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -111,6 +120,27 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-devtools-v121</artifactId>
+            <version>${selenium-devtools-v121-ver}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-devtools-v119</artifactId>
+            <version>${selenium-devtools-v119-ver}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-devtools-v133</artifactId>
+            <version>4.31.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.stephenc.monte</groupId>
+            <artifactId>monte-screen-recorder</artifactId>
+            <version>0.7.7.0</version>
+        </dependency>
 
     </dependencies>
 
