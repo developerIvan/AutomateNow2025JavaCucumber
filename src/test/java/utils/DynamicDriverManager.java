@@ -18,8 +18,8 @@ public class DynamicDriverManager {
             switch (browser.toLowerCase()) {
                 case "chrome":
                     ChromeOptions chromeOptions = new ChromeOptions();
-                 //   chromeOptions.addArguments("--headless");
-                  //  chromeOptions.addArguments("--window-size="+browserHeight+","+browserWidth+"");
+                    chromeOptions.addArguments("--headless");
+                    chromeOptions.addArguments("--window-size="+browserHeight+","+browserWidth+"");
                     driver.set(new ChromeDriver(chromeOptions));
                     break;
                 case "firefox":
