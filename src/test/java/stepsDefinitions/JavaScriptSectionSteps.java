@@ -10,33 +10,11 @@ import utils.ErrorLogManager;
 
 public class JavaScriptSectionSteps {
     private JavaScriptSection javaScriptSection;
-    private GenericSteps genericSteps;
+
     public JavaScriptSectionSteps(Hooks configHooks) {
         javaScriptSection = new JavaScriptSection();
         javaScriptSection.setWebDriver(configHooks.getWebDriver());
-        genericSteps = new GenericSteps(javaScriptSection.getWebDriver());
-        ErrorLogManager.logInfo("GenericSteps driver session " + configHooks.getSession());
     }
-
-
-
-    @Then("the user validates if Javascript section {string} is visible")
-    public void validateStringIsVisible (String stringParam) {
-        Boolean epectedStringIsVisible = false;
-        String errorMessage = "";
-        String stepName= "Then the user validates if Javascript section "+stringParam+" is visible";
-        Result<WebElement> element = javaScriptSection.findElementByXpathText(stringParam,javaScriptSection.getJavaScriptSectionErrorCode());
-           if(element.isSuccess()){
-                epectedStringIsVisible = element.getValue().get().isDisplayed();
-           }else{
-               errorMessage = element.getError().get();
-           }
-
-
-        ErrorLogManager.saveScreenShotToAllure(stepName,javaScriptSection.getWebDriver());
-        Assert.assertTrue(epectedStringIsVisible, "Element "+stringParam+" from page section not displayed,  "+errorMessage);
-    }
-
 
 
     @When("the user clicks on the button with id {string} in javascript section")
@@ -86,16 +64,5 @@ public class JavaScriptSectionSteps {
         ErrorLogManager.saveScreenShotToAllure(stepName,javaScriptSection.getWebDriver());
         Assert.assertTrue(expectedValue, "Error waiting for text attribute in input field with id "+javaScriptSection.getDelayInputId()+" contains the expected value "+text+" : "+errorMessage);
 
-    }
-    @Then("the user validates if the string {string} in javascript section is visible")
-    public void validatesIfExpectedTextInJavascriptSectionIsVisible(String expectedText){
-        String stepName = "the user validates if the string  "+expectedText+" in javascript section is visible";
-        this.genericSteps.validateStringIsVisible(expectedText,stepName);
-    }
-
-    @And("the user waits for text {string} to be visible in Javascript section")
-    public void waitIfTextIsVisibleInJavascriptSection(String expectedText){
-        String stepName = "the user validates if the string  "+expectedText+" in javascript section is visible";
-        this.genericSteps.userWaitsForTextToBeVisible(expectedText,stepName);
     }
 }

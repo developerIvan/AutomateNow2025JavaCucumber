@@ -16,13 +16,6 @@ import org.testng.annotations.DataProvider;
 )
 public class CucumberTestNGE2ERunner extends    AbstractTestNGCucumberTests{
 
-    /*Todo implement the setup class to run the scenarios in parallel */
-    /*  @Override
-    public void setUpClass(ITestContext context) {
-
-     super.setUpClass(context);
-    }*/
-
     @Override
     @DataProvider(parallel = true) //This is to run the scenarios in parallel
     public Object[][] scenarios() {
