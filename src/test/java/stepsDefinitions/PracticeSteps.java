@@ -10,11 +10,10 @@ import utils.ErrorLogManager;
 public class PracticeSteps {
 
     private Practice practicePage;
-    private GenericSteps genericSteps;
+
     public PracticeSteps(Hooks configHooks) {
         practicePage = new Practice();
         practicePage.setWebDriver(configHooks.getWebDriver());
-        genericSteps = new GenericSteps(practicePage.getWebDriver());
     }
 
     @Given("User goes to web page {string}")
@@ -33,13 +32,6 @@ public class PracticeSteps {
         Assert.assertTrue(pageIsLoaded, "Error opening page"+errorMessage);
     }
 
-    @Then("the user validates if section {string} from Practice page is visible")
-    public void validateSectionIsVisible (String stringParam) {
-        String testStepName = "Then the user validates if section "+stringParam+" from Practice page is visible";
-        this.genericSteps.validateStringIsVisible(stringParam);
-
-    }
-
     @When("the user clicks on the button {string} in practice section")
     public void userClicksOnTheLink(String linkText) {
         Boolean expectedClickResult = false;
@@ -55,15 +47,4 @@ public class PracticeSteps {
         Assert.assertTrue(expectedClickResult, "Error clicking on link: "+linkText+ ":" + errorMessage);
     }
 
-    @Then("the user validates if the welcome message {string} is visible")
-    public void validateIfWelcomeStringIsVisible (String stringParam) {
-       String testSteps =  "the user validates if the welcome message "+stringParam+" is visible";
-       this.genericSteps.validateStringIsVisible(stringParam);
-    }
-
-    @And("the user waits for text {string} to be visible in Practice Section")
-    public void waitsForTextTobeVisibleInPracticeSection (String stringParam) {
-        String testSteps =  "the user validates if the welcome message "+stringParam+" is visible";
-        this.genericSteps.userWaitsForTextToBeVisible(stringParam,testSteps);
-    }
 }

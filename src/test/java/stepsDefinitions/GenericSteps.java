@@ -95,24 +95,9 @@ public class GenericSteps {
         }else{
             errorMessage = setValueResult.getError().get();
         }
-        //     ErrorLogManager.saveScreenShotToAllure(stepName);
+        String stepName=String.format("the user scrolls to %s",text);
+        ErrorLogManager.saveScreenShotToAllure(stepName,generalSelectorActions.getWebDriver());
         Assert.assertTrue(expectedValue,  errorMessage);
     }
-
-
-
-    public void theUserScrollsToText(String text,String stepName) {
-        String errorMessage = "";
-        Result<Boolean> setValueResult = generalSelectorActions.scrollsToText( text, generalSelectorActions.getErrorCode());
-        boolean expectedValue = false;
-        if(setValueResult.isSuccess()){
-            expectedValue = setValueResult.getValue().get();
-        }else{
-            errorMessage = setValueResult.getError().get();
-        }
-   //     ErrorLogManager.saveScreenShotToAllure(stepName);
-        Assert.assertTrue(expectedValue,  errorMessage);
-    }
-
 
 }

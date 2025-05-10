@@ -13,11 +13,10 @@ import org.openqa.selenium.interactions.WheelInput;
 
 public class FormFieldSteps {
     private FormFieldsSection formFieldsSection;
-    private GenericSteps genericSteps;
+
     public FormFieldSteps(Hooks configHooks) {
         formFieldsSection = new FormFieldsSection();
         formFieldsSection.setWebDriver(configHooks.getWebDriver());
-        genericSteps = new GenericSteps(formFieldsSection.getWebDriver());
     }
 
     @And("the user enter the password {string} in the password input field")
@@ -72,9 +71,6 @@ public class FormFieldSteps {
     public void theUserSelectsTheOptionInTheAutomationDropdown(String option) {
         String errorMessage = "";
         String stepName = "When the user selects the "+option+" option in the automation dropdown";
-        String dropdownLabelText = "Automation tools";
-     //   this.genericSteps.theUserScrollsToText(dropdownLabelText,stepName);
-     //   ((JavascriptExecutor) this.formFieldsSection.getWebDriver()).executeScript("arguments[0].scrollIntoView(true);", this.formFieldsSection.getWebDriver().findElement(By.cssSelector(formFieldsSection.getAutomationDropdownCssSelectorId())));
 
         Result<Boolean> setValueResult = formFieldsSection.chooseOptionFromSelectWebElement(formFieldsSection.getAutomationDropdownCssSelectorId(), option, formFieldsSection.getFormFieldsSectionErrorCode());
         boolean expectedValue = false;
@@ -149,22 +145,11 @@ public class FormFieldSteps {
         Assert.assertEquals(actualMessage, message, errorMessage);
     }
 
-    @Then("the user validates if the form page displays the expected text {string}")
-    public void validateIfFormPageContainsTehExpectedText(String message) {
-        String stepName = "Then the user validates if form page display the expected text "+message;
-        this.genericSteps.validateStringIsVisible(message);
-    }
 
 
     @And("^the user waits for (\\d+) seconds$")
     public void theUserWaitsForSeconds(int seconds) throws InterruptedException {
         Thread.sleep(seconds*1000);
-    }
-
-    @And("the user waits for the text {string} to be displayed in form section")
-    public void theUserWaitsForTextIsVisible(String text) throws InterruptedException {
-        String stepName = "the user waits for the text "+text+" to be displayed in form section";
-        this.genericSteps.userWaitsForTextToBeVisible(text,stepName);
     }
 
 
