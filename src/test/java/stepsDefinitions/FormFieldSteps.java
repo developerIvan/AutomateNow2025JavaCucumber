@@ -98,6 +98,22 @@ public class FormFieldSteps {
         Assert.assertTrue(expectedValue,  errorMessage);
     }
 
+
+    @Then("the user scrolls to automation select option")
+    public void scrollToSelector(){
+        String errorMessage = "";
+        Result<Boolean> setValueResult = formFieldsSection.scrollsToElement(By.cssSelector(formFieldsSection.getAutomationDropdownCssSelectorId()),formFieldsSection.getErrorCode());
+        boolean expectedValue = false;
+        if(setValueResult.isSuccess()){
+            expectedValue = setValueResult.getValue().get();
+        }else{
+            errorMessage = setValueResult.getError().get();
+        }
+        String stepName=String.format("the user scrolls to automation select option");
+        ErrorLogManager.saveScreenShotToAllure(stepName,formFieldsSection.getWebDriver());
+        Assert.assertTrue(expectedValue,  errorMessage);
+    }
+
     @When("the user enters the message {string} in the message input field")
     public void theUserEntersTheMessageInTheMessageInputField(String message) {
         String errorMessage = "";
