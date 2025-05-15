@@ -9,7 +9,7 @@ Feature: Form Fields confirmation message
     And the user enter the password "Test" in the password input field
     And the user select the checkbox value "Water" under the label "What is your favorite drink?"
     And the user select the checkbox value "Blue" under the label "What is your favorite color?"
-    When the user scrolls to "Do you like automation?"
+    Then the user scrolls to automation select option
     When the user selects the "yes" option in the automation dropdown
     And the user enters the email "jorgematamoros@gmail.com" in the email input field
     When the user scrolls to "Message"
