@@ -69,7 +69,7 @@ public class ScreenRecorderMonte extends ScreenRecorder {
         this.stop();
         String inputPath = finalPath.resolve(this.getVideoName() + ".avi").toString();
         String outputPath = finalPath.resolve(this.getVideoName() + ".mp4").toString();
-    /*    String ffmpegCommand = String.format("ffmpeg -y -i \"%s\" -vcodec libx264 -crf 24 \"%s\"", inputPath, outputPath);
+      // String ffmpegCommand = String.format("ffmpeg -y -i \"%s\" -vcodec libx264 -crf 24 \"%s\"", inputPath, outputPath);
 
         String outputMp4Path = inputPath.replace(".avi", ".mp4");
 
@@ -78,21 +78,10 @@ public class ScreenRecorderMonte extends ScreenRecorder {
                 inputPath, outputMp4Path);
 
 
-
-       // String ffmpegCommand = String.format("ffmpeg  -i \"%s\" -map 0:1 -c copy \"%s\"", inputPath, outputPath);
-
-        //"ffmpeg -i recordings/testGoogleSearch.mov -vcodec libx264 -crf 24 recordings/testGoogleSearch.mp4")
-
-        Runtime.getRuntime().exec(command);*/
+        Runtime.getRuntime().exec(command);
 
 
     }
 
-    public static void deleteRecords() {
-        File directory = new File(finalPath.toString());
-        File[] files = directory.listFiles();
-        for (File file : files) {
-            file.delete();
-        }
-    }
+
 }

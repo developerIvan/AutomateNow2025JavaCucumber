@@ -56,3 +56,23 @@ This project showcases **automated UI testing** for a web application using **Se
    ```sh
      mvn allure:serve
    ```
+
+
+## 📺 Generating videos on local machine (Windows only)
+1.**Install the required FFmpeg application**
+https://www.youtube.com/watch?v=SG1Fc5QB8RE
+
+2.**Modify isHeadLessBrowser variable in .env file to false**
+ ```.env
+     isHeadLessBrowser=false
+   ```
+3.**Execute the framework**
+   ```sh
+    mvn clean test
+   ``` 
+ 4.**Go to the Recording folder to see the generated videos**
+   ```sh
+    cd SeleniumJavaautomateNow2025PorfolioProject
+    cd Recordings
+    ls
+   ``` 

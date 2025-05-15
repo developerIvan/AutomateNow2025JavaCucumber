@@ -1,5 +1,5 @@
 Feature: Form Fields section page
-  @E2E @FormFieldsSection @TC-006
+  @E2E  @TC-006 @FormFieldsSection
   Scenario: User is able to access to the Form Fields page
     Given User goes to web page "https://practice-automation.com/"
     And the user waits for text "Welcome to your software automation practice website!" to be visible
