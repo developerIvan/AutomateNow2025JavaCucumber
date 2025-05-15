@@ -3,17 +3,20 @@ package stepsDefinitions;
 import PageObjectModel.FormFieldsSection;
 import ResultPattern.Result;
 import io.cucumber.java.en.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import utils.ErrorLogManager;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.interactions.WheelInput;
 
 public class FormFieldSteps {
     private FormFieldsSection formFieldsSection;
-    private GenericSteps genericSteps;
+
     public FormFieldSteps(Hooks configHooks) {
         formFieldsSection = new FormFieldsSection();
         formFieldsSection.setWebDriver(configHooks.getWebDriver());
-        genericSteps = new GenericSteps(formFieldsSection.getWebDriver());
-        ErrorLogManager.logInfo("FormFieldsSectionSteps driver session " + configHooks.getSession());
     }
 
     @And("the user enter the password {string} in the password input field")
@@ -68,6 +71,7 @@ public class FormFieldSteps {
     public void theUserSelectsTheOptionInTheAutomationDropdown(String option) {
         String errorMessage = "";
         String stepName = "When the user selects the "+option+" option in the automation dropdown";
+
         Result<Boolean> setValueResult = formFieldsSection.chooseOptionFromSelectWebElement(formFieldsSection.getAutomationDropdownCssSelectorId(), option, formFieldsSection.getFormFieldsSectionErrorCode());
         boolean expectedValue = false;
         if(setValueResult.isSuccess()){
@@ -90,6 +94,22 @@ public class FormFieldSteps {
         }else{
             errorMessage = setValueResult.getError().get();
         }
+        ErrorLogManager.saveScreenShotToAllure(stepName,formFieldsSection.getWebDriver());
+        Assert.assertTrue(expectedValue,  errorMessage);
+    }
+
+
+    @Then("the user scrolls to automation select option")
+    public void scrollToSelector(){
+        String errorMessage = "";
+        Result<Boolean> setValueResult = formFieldsSection.scrollsToElement(By.cssSelector(formFieldsSection.getAutomationDropdownCssSelectorId()),formFieldsSection.getErrorCode());
+        boolean expectedValue = false;
+        if(setValueResult.isSuccess()){
+            expectedValue = setValueResult.getValue().get();
+        }else{
+            errorMessage = setValueResult.getError().get();
+        }
+        String stepName=String.format("the user scrolls to automation select option");
         ErrorLogManager.saveScreenShotToAllure(stepName,formFieldsSection.getWebDriver());
         Assert.assertTrue(expectedValue,  errorMessage);
     }
@@ -141,11 +161,6 @@ public class FormFieldSteps {
         Assert.assertEquals(actualMessage, message, errorMessage);
     }
 
-    @Then("the user validates if the form page displays the expected text {string}")
-    public void validateIfFormPageContainsTehExpectedText(String message) {
-        String stepName = "Then the user validates if form page display the expected text "+message;
-        this.genericSteps.validateStringIsVisible(message,stepName);
-    }
 
 
     @And("^the user waits for (\\d+) seconds$")
@@ -153,9 +168,5 @@ public class FormFieldSteps {
         Thread.sleep(seconds*1000);
     }
 
-    @When("the user scrolls to {string}")
-    public void theUserScrollsTo(String text) {
-        String stepName = "When the user scrolls to "+text;
-        this.genericSteps.theUserScrollsToText(text,stepName);
-    }
+
 }

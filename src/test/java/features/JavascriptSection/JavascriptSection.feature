@@ -6,4 +6,4 @@ Feature: Javascript section page
     And the user waits for text "Welcome to your software automation practice website!" to be visible
     When the user clicks on the button "JavaScript Delays" in practice section
     And the user waits for text "There will be times when you will need to wait for certain conditions or events as you write automated tests." to be visible
-    Then the user validates if the string "Start" in javascript section is visible
+    Then the user validates if the string "Start" is visible

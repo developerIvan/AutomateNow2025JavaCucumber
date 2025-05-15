@@ -1,29 +1,21 @@
 package stepsDefinitions;
 
-import io.cucumber.java.*;
+import io.cucumber.java.After;
+import io.cucumber.java.AfterAll;
+import io.cucumber.java.Before;
 import org.openqa.selenium.WebDriver;
-import utils.*;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterSuite;
+import utils.DynamicDriverManager;
+import utils.ErrorLogManager;
 import io.github.cdimascio.dotenv.Dotenv;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class Hooks {
     private WebDriver driver;
 
-
-
-    private Path currentPath = Paths.get(System.getProperty("user.dir"));
-    private Path finalPath = currentPath.resolve("Recordings");
-    private static ScreenRecorderMonte screenRecorder;
-
-    @BeforeAll
-    public static void before_or_after_all()
-    {
-        screenRecorder.deleteRecords();
-    }
+    private DynamicDriverManager driverManager = new DynamicDriverManager();
     @Before
-    public void setup(Scenario scenario) throws Exception {
+    public void setup() {
         Dotenv dotenv = Dotenv.load();
         String browserName = dotenv.get("browserName");
         String browserHeight =  dotenv.get("browserHeight");
@@ -32,41 +24,16 @@ public class Hooks {
         if (browserName == null) {
             browserName = "chrome";
         }
-        driver = DriverManager.getDriver(browserName.toLowerCase(), browserHeight.toLowerCase(), browserWidth.toLowerCase());
-
-      //  DevTools devTools = ((HasDevTools) driver).getDevTools();
-       // screenRecorder.setDevTools(devTools);
-;
-      //  finalPath = finalPath.resolve(sanitizeFileName(scenario.getName().toString()));
-
-      //  screenRecorder.setFileOutpuDir(new File(finalPath.toString()));
-     //   screenRecorder.startRecording(Integer.parseInt(browserWidth),Integer.parseInt(browserHeight));
-        String videoName = sanitizeFileName(scenario.getName().toString());
-        screenRecorder = DriverManager.getRecorder(videoName);
-        screenRecorder.startRecording();
-
+        driver = driverManager.getDriver(browserName.toLowerCase(), browserHeight.toLowerCase(), browserWidth.toLowerCase());
     }
 
-    public String getSession() {
-        return DriverManager.getSessionInfo();
-    }
 
     public WebDriver getWebDriver(){
         return driver;
     }
 
     @After
-    public void teardown() throws Exception {
-         screenRecorder.stopRecord();
-          DriverManager.quitDriver();
-
-
-      //  screenRecorder.combineFramesToVideo(finalPath.toString(), scenarioName+".mp4");
-     //   DriverManager.stopRecording();
-
-    }
-
-    private String sanitizeFileName(String name) {
-        return name.replaceAll("[^a-zA-Z0-9.-]", "_");
+    public void teardown() {
+        driverManager .quitDriver();
     }
 }

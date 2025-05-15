@@ -17,8 +17,8 @@
         <junit.version>5.9.2</junit.version>
         <testng.version>7.11.0</testng.version>
         <cucumbertestng.version>7.21.1</cucumbertestng.version>
-        <logger-slf4j-api-version>1.7.36</logger-slf4j-api-version>
-        <logger-logback-api-version>1.2.11</logger-logback-api-version>
+        <logger-slf4j-api-version>2.0.17</logger-slf4j-api-version>
+        <logger-logback-api-version>1.5.18</logger-logback-api-version>
         <pi-container-version>7.21.1</pi-container-version>
         <allure.version>2.29.1</allure.version>
         <aspectj.version>1.9.20.1</aspectj.version>

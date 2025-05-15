@@ -217,7 +217,7 @@ public class GeneralSelectorActions {
         } catch (Exception e) {
             String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
             ErrorLogManager.logError(errorId,e,"Error on selecting option from select");
-            return Result.failure("Error selecting option from select using selector: "+selectCssSelector+" with value"+optionValue+" error code: "+errorId);
+            return Result.failure("Error selecting option from select using selector: "+selectCssSelector+" with value: "+optionValue+" error code: "+errorId);
         }
     }
 
@@ -230,6 +230,18 @@ public class GeneralSelectorActions {
             String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
             ErrorLogManager.logError(errorId,e,"Error on scrolling to text");
             return Result.failure("Error scrolling to text: "+textParam+" error code: "+errorId);
+        }
+    }
+
+    public Result<Boolean> scrollsToElement(By bySelector, String errorCode) {
+        try {
+            WebElement element = mainDriver.findElement(bySelector);
+            ((JavascriptExecutor) mainDriver).executeScript("arguments[0].scrollIntoView(true);", element);
+            return Result.success(true);
+        } catch (Exception e) {
+            String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
+            ErrorLogManager.logError(errorId,e,"Error on scrolling to text");
+            return Result.failure(String.format("Error scrolling to element: %s error code: %s ",bySelector.toString(),errorId));
         }
     }
 
