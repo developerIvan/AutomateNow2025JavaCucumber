@@ -28,13 +28,13 @@ public class ScreenRecorderManager {
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             int width = screenSize.width;
             int height = screenSize.height;
-            Rectangle captureSize = new Rectangle(0, 0, width, height);
+            Rectangle captureArea = new Rectangle(0, 0, 1024, 768);
 
             GraphicsConfiguration gc = GraphicsEnvironment.getLocalGraphicsEnvironment().
                     getDefaultScreenDevice()
                     .getDefaultConfiguration();
 
-            screenRecorder.set(new ScreenRecorderMonte(gc, captureSize,
+            screenRecorder.set(new ScreenRecorderMonte(gc, captureArea,
                     new Format(MediaTypeKey, FormatKeys.MediaType.FILE, MimeTypeKey, MIME_AVI),
                     new Format(MediaTypeKey, MediaType.VIDEO, EncodingKey, ENCODING_AVI_TECHSMITH_SCREEN_CAPTURE,
                             CompressorNameKey, ENCODING_AVI_TECHSMITH_SCREEN_CAPTURE, DepthKey, 24, FrameRateKey,
@@ -48,6 +48,9 @@ public class ScreenRecorderManager {
 
     public static void deleteRecords() {
         File directory = new File(finalPath.toString());
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
         File[] files = directory.listFiles();
         for (File file : files) {
             file.delete();
