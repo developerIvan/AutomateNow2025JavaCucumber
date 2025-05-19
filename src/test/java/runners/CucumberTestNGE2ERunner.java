@@ -1,7 +1,7 @@
 package runners;
 import io.cucumber.testng.CucumberOptions;
 import io.cucumber.testng.AbstractTestNGCucumberTests;
-import org.testng.ITestContext;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.DataProvider;
 
 @CucumberOptions(
@@ -12,7 +12,7 @@ import org.testng.annotations.DataProvider;
                 "pretty"
         },
         monochrome = true,
-        tags = "@E2E"
+        tags = ""
 )
 public class CucumberTestNGE2ERunner extends    AbstractTestNGCucumberTests{
 
@@ -21,4 +21,13 @@ public class CucumberTestNGE2ERunner extends    AbstractTestNGCucumberTests{
     public Object[][] scenarios() {
         return super.scenarios();
     }
+
+    @BeforeSuite
+    public static void setup() {
+        String tags = System.getProperty("cucumber.filter.tags");
+        if (tags != null) {
+            System.setProperty("cucumber.filter.tags", tags);
+        }
+    }
+
 }

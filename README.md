@@ -47,6 +47,11 @@ This project showcases **automated UI testing** for a web application using **Se
    ```sh
     mvn clean test
     ```
+
+    ```sh 
+    "Alternative run features by tags . Example"
+    mvn clean test -D"cucumber.filter.tags=@E2E and not @PracticeSection"
+    ```
 ## 🚀 Reporting    
 1.**Generate Allure report**
    ```sh
