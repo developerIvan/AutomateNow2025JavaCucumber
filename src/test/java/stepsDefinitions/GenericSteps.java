@@ -81,7 +81,7 @@ public class GenericSteps {
             errorMessage = elementResult.getError().get();
         }
         String stepName =String.format("the user validates if the string %s is visible",stringParam);
-        ErrorLogManager.saveScreenShotToAllure(stepName);
+        ErrorLogManager.saveScreenShotToAllure(stepName,generalSelectorActions.getWebDriver());
         Assert.assertTrue(stringIsVisible, "Element "+stringParam+" not displayed "+errorMessage);
     }
 

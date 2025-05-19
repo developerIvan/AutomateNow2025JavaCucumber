@@ -12,7 +12,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 public class Hooks {
     private WebDriver driver;
-
+    private boolean isHeadlessBrowser = true;
     private DynamicDriverManager driverManager = new DynamicDriverManager();
     @Before
     public void setup() {
@@ -20,17 +20,24 @@ public class Hooks {
         String browserName = dotenv.get("browserName");
         String browserHeight =  dotenv.get("browserHeight");
         String browserWidth =  dotenv.get("browserWidth");
+        String isHeadlessParam = dotenv.get("isHeadLessBrowser");
 
         if (browserName == null) {
             browserName = "chrome";
         }
-        driver = driverManager.getDriver(browserName.toLowerCase(), browserHeight.toLowerCase(), browserWidth.toLowerCase());
+
+        if(isHeadlessParam == null){
+            isHeadlessParam = "True";
+        }
+        isHeadlessBrowser = Boolean.parseBoolean(isHeadlessParam);
+        driver = driverManager.getDriver(browserName.toLowerCase(), browserHeight.toLowerCase(), browserWidth.toLowerCase(),isHeadlessBrowser);
     }
 
 
     public WebDriver getWebDriver(){
         return driver;
     }
+
 
     @After
     public void teardown() {

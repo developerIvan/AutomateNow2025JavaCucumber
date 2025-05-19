@@ -11,29 +11,19 @@ public class DynamicDriverManager {
     private ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
 
-    public  WebDriver getDriver(String browser,String browserHeight,String browserWidth) {
+    public  WebDriver getDriver(String browser,String browserHeight,String browserWidth,boolean isHeadless) {
         if (driver.get() == null) {
             if(browserHeight == null) browserHeight = "1920";
             if(browserWidth == null) browserWidth = "1080";
             switch (browser.toLowerCase()) {
                 case "chrome":
-                    ChromeOptions chromeOptions = new ChromeOptions();
-                    chromeOptions.addArguments("--headless");
-                    chromeOptions.addArguments("--window-size="+browserHeight+","+browserWidth+"");
-                    driver.set(new ChromeDriver(chromeOptions));
+                    driver.set(new ChromeDriver(getChormeOptions(isHeadless,browserHeight,browserWidth)));
                     break;
                 case "firefox":
-                    FirefoxOptions firefoxOptions = new FirefoxOptions();
-                    firefoxOptions.addArguments("--headless");
-                    firefoxOptions.addArguments("--width="+browserWidth+"");
-                    firefoxOptions.addArguments("--height="+browserHeight+"");
-                    driver.set(new FirefoxDriver(firefoxOptions));
+                    driver.set(new FirefoxDriver(getFireFoxOptions(isHeadless,browserHeight,browserWidth)));
                     break;
                 case "edge":
-                    EdgeOptions edgeOptions = new EdgeOptions();
-                    edgeOptions.addArguments("--headless");
-                    edgeOptions.addArguments("--window-size="+browserHeight+","+browserWidth+"");
-                    driver.set(new EdgeDriver(edgeOptions));
+                    driver.set(new EdgeDriver(getEdgeOptions(isHeadless,browserHeight,browserWidth)));
                     break;
                 default:
                     throw new IllegalArgumentException("Unsupported browser: " + browser);
@@ -44,6 +34,35 @@ public class DynamicDriverManager {
     }
 
 
+    public ChromeOptions getChormeOptions(boolean isHeadless,String browserHeight,String browserWidth){
+        ChromeOptions chromeOptions = new ChromeOptions();
+        if(isHeadless){
+            chromeOptions.addArguments("--headless");
+            chromeOptions.addArguments("--window-size="+browserHeight+","+browserWidth+"");
+        }
+        return chromeOptions;
+    }
+
+    public FirefoxOptions getFireFoxOptions(boolean isHeadless,String browserHeight,String browserWidth){
+        FirefoxOptions firefoxOptions = new FirefoxOptions();
+
+        if(isHeadless){
+            firefoxOptions.addArguments("--headless");
+            firefoxOptions.addArguments("--width="+browserWidth+"");
+            firefoxOptions.addArguments("--height="+browserHeight+"");
+        }
+
+        return firefoxOptions;
+    }
+
+    public EdgeOptions getEdgeOptions(boolean isHeadless,String browserHeight,String browserWidth){
+        EdgeOptions edgeOptions = new EdgeOptions();
+        if(isHeadless){
+            edgeOptions.addArguments("--headless");
+            edgeOptions.addArguments("--window-size="+browserHeight+","+browserWidth+"");
+        }
+        return edgeOptions;
+    }
     public  void quitDriver() {
         if (driver.get() != null) {
             try {
