@@ -54,6 +54,21 @@ public class GenericSteps {
         Assert.assertTrue(expectedTextIsVisible, "Element not found with text: "+text + " "+errorMessage + "");
     }
 
+    @Given("the user is able to see the section {string}")
+    public void userValidatesTheSectionIsVisbile(String text) {
+        String errorMessage = "";
+        Result<WebElement> elementIsVisible = generalSelectorActions.findElementByExactXpathText(text,generalSelectorActions.getErrorCode());
+        Boolean expectedTextIsVisible = false;
+        if(elementIsVisible.isSuccess()){
+            expectedTextIsVisible = elementIsVisible.getValue().get().isDisplayed();
+        }else if(elementIsVisible.isFailure()){
+            errorMessage = elementIsVisible.getError().get();
+        }
+        String stepName =String.format("the user is able to see the section %s",text);
+        ErrorLogManager.saveScreenShotToAllure(stepName);
+        Assert.assertTrue(expectedTextIsVisible, "Element not found with text: "+text + " "+errorMessage + "");
+    }
+
     @When("the user clicks on the {string} link")
     public void userClicksOnTheLink(String linkText) {
         String errorMessage = "";
