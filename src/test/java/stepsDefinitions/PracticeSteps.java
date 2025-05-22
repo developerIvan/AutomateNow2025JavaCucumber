@@ -32,7 +32,7 @@ public class PracticeSteps {
         Assert.assertTrue(pageIsLoaded, "Error opening page"+errorMessage);
     }
 
-    @When("the user clicks on the button {string} in practice section")
+    @And("the user clicks on the button {string} in practice section")
     public void userClicksOnTheLink(String linkText) {
         Boolean expectedClickResult = false;
         String errorMessage = "";

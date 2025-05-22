@@ -1,10 +1,13 @@
 Feature: Form Fields confirmation message
-  @E2E @FormFieldsSection @TC-005
-  Scenario: User is able to validate the confirmation message of Form Fields section
+
+  Background:
     Given User goes to web page "https://practice-automation.com/"
     And the user waits for text "Welcome to your software automation practice website!" to be visible
-    When the user clicks on the button "Form Fields" in practice section
-    And the user waits for text "Filling out a web form is one of the most fundamental things to learn" to be visible
+    And the user clicks on the button "Form Fields" in practice section
+
+  @E2E @FormFieldsSection @TC-005
+  Scenario: User is able to validate the confirmation message of Form Fields section
+    Given the user is able to see the section "Form Fields"
     When the user enters "Jon" in the field name
     And the user enter the password "Test" in the password input field
     And the user select the checkbox value "Water" under the label "What is your favorite drink?"

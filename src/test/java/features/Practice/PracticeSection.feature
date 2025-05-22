@@ -1,4 +1,5 @@
 Feature: Practice home page
+
   @E2E @TC-002 @PracticeSection
   Scenario: User is able to see the sections from automate.io practice page
     Given User goes to web page "https://practice-automation.com/"
