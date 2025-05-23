@@ -5,13 +5,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
+
 import utils.ErrorLogManager;
 
 public class GeneralSelectorActions {
@@ -135,23 +133,18 @@ public class GeneralSelectorActions {
     }
 
 
-    public Result<WebElement> findElementBySpecificCSSClass(String cssClass) {
+    public Result<WebElement> findElementBySpecificCSSClass(String cssClass,String errorCodeParam) {
         try {
             return Result.success(mainDriver.findElement(By.cssSelector(cssClass)));
-        } catch (Exception e) {
-            return Result.failure("Element not found with css selector  "+cssClass );
+        }  catch (Exception e) {
+            String errorId = ErrorLogManager.getUniqueErrorCode(errorCodeParam);
+            ErrorLogManager.logError(errorId,e,"Error on find WebElement");
+            return Result.failure("Element not found with cssClass  "+cssClass + " Error Code:"+errorId);
         }
     }
 
-    public Result<ArrayList<WebElement>> findElementsByXpathText(String textParam) {
-        String xpathSelector = "";
-        try {
-            xpathSelector = "//*[contains(text(),"+textParam+")]";
-            ArrayList<WebElement> elements =(ArrayList<WebElement>) mainDriver.findElements(By.xpath(xpathSelector));
-            return Result.success(elements);
-        } catch (Exception e) {
-            return Result.failure("Elements not found: with selector  "+xpathSelector );
-        }
+    public List<WebElement> findElements(By bySelector) {
+      return mainDriver.findElements(bySelector);
     }
 
     public Result<ArrayList<WebElement>> findElementsByCss(String cssSelector) {
@@ -193,10 +186,26 @@ public class GeneralSelectorActions {
         }
     }
 
+    public Result<Boolean> clickElementByCssSelector(String cssSelector,String errorCode) {
+        String errorId ="";
+        try {
+            Result<WebElement> clickableElement = findElementBySpecificCSSClass(cssSelector,errorCode);
+            if(clickableElement.isFailure()){
+                return Result.failure(clickableElement.getError().toString().replace("Optional",""));
+            }
+            clickableElement.getValue().get().click();
+            return Result.success(true);
+        } catch (Exception e) {
+            errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
+            ErrorLogManager.logError(errorId,e,"Error on clicking WebElement");;
+            return Result.failure(String.format("Could not be able to click on WebElement found with given cssClass selector %s Error Code: %s ",cssSelector,errorId));
+        }
+    }
+
     public Result<Boolean> selectOptionByValue(String cssSelector,String errorCode) {
         String errorId ="";
         try {
-            Result<WebElement> clickableElement = findElementBySpecificCSSClass(cssSelector);
+            Result<WebElement> clickableElement = findElementBySpecificCSSClass(cssSelector,errorCode);
             if(clickableElement.isFailure()){
                 return Result.failure(clickableElement.getError().toString().replace("Optional",""));
             }
@@ -224,7 +233,8 @@ public class GeneralSelectorActions {
     public Result<Boolean> scrollsToText(String textParam, String errorCode) {
         try {
             WebElement element = mainDriver.findElement(By.xpath("//*[contains(text(),'"+textParam+"')]"));
-            ((JavascriptExecutor) mainDriver).executeScript("arguments[0].scrollIntoView(true);", element);
+            ((JavascriptExecutor) mainDriver).executeScript("arguments[0].scrollIntoViewIfNeeded();", element);
+            this.wait.until(ExpectedConditions.visibilityOf(element));
             return Result.success(true);
         } catch (Exception e) {
             String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
@@ -236,8 +246,14 @@ public class GeneralSelectorActions {
     public Result<Boolean> scrollsToElement(By bySelector, String errorCode) {
         try {
             WebElement element = mainDriver.findElement(bySelector);
-            ((JavascriptExecutor) mainDriver).executeScript("arguments[0].scrollIntoView(true);", element);
-            return Result.success(true);
+            ((JavascriptExecutor) mainDriver).executeScript("arguments[0].scrollIntoViewIfNeeded();", element);
+            this.wait.until(ExpectedConditions.visibilityOf(element));
+            if(element.isDisplayed()){
+                return Result.success(true);
+            }else {
+                return Result.failure(String.format("Error scrolling to element: %s because is not visible",bySelector.toString()));
+            }
+
         } catch (Exception e) {
             String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
             ErrorLogManager.logError(errorId,e,"Error on scrolling to text");
@@ -254,9 +270,22 @@ public class GeneralSelectorActions {
             return Result.success(actualAlertText);
         } catch (Exception e) {
             String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
-            ErrorLogManager.logError(errorId,e,"Error on scrolling to text");
+            ErrorLogManager.logError(errorId,e,"Error on retrieving text from alert ");
             return Result.failure("No alert present, error code: "+errorId);
         }
+    }
+
+    public Result<Boolean> validateElementIsNotVisible(By bySelector, String errorCode){
+        try{
+            List<WebElement> elementList = this.findElements(bySelector);
+            Boolean doesListContainsWebElements = elementList.size()>0?false:true;
+            return Result.success(doesListContainsWebElements);
+        }catch(Exception e){
+            String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
+            ErrorLogManager.logError(errorId,e,String.format("Error on  retrieving web elements using selector  %s",bySelector));
+            return Result.failure(String.format("Error on  retrieving web elements. error Id: ",errorId));
+        }
+
     }
 
 

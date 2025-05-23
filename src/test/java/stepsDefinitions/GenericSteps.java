@@ -26,19 +26,6 @@ public class GenericSteps {
         ErrorLogManager.logInfo("GenericSteps driver session " + driver);
     }
 
-    public void userWaitsForTextToBeVisible(String text,String stepName) {
-        String errorMessage = "";
-        Result<WebElement> elementIsVisible = generalSelectorActions.waitElementByXpathText(text,generalSelectorActions.getErrorCode());
-        Boolean expectedTextIsVisible = false;
-        if(elementIsVisible.isSuccess()){
-            expectedTextIsVisible = elementIsVisible.getValue().get().isDisplayed();
-        }else if(elementIsVisible.isFailure()){
-            errorMessage = elementIsVisible.getError().get();
-        }
-        ErrorLogManager.saveScreenShotToAllure(stepName);
-        Assert.assertTrue(expectedTextIsVisible, "Element not found with text: "+text + " "+errorMessage + "");
-    }
-
     @And("the user waits for text {string} to be visible")
     public void userWaitsForTheTextToBeVisible(String text) {
         String errorMessage = "";
@@ -100,7 +87,7 @@ public class GenericSteps {
         Assert.assertTrue(stringIsVisible, "Element "+stringParam+" not displayed "+errorMessage);
     }
 
-    @When("the user scrolls to {string}")
+    @And("the user scrolls to {string}")
     public void theUserScrollsTo(String text) {
         String errorMessage = "";
         Result<Boolean> setValueResult = generalSelectorActions.scrollsToText( text, generalSelectorActions.getErrorCode());
