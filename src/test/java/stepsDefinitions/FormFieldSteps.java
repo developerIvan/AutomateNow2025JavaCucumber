@@ -4,12 +4,8 @@ import PageObjectModel.FormFieldsSection;
 import ResultPattern.Result;
 import io.cucumber.java.en.*;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import utils.ErrorLogManager;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.interactions.WheelInput;
 
 public class FormFieldSteps {
     private FormFieldsSection formFieldsSection;
@@ -67,13 +63,20 @@ public class FormFieldSteps {
 
 
 
-    @When("the user selects the {string} option in the automation dropdown")
+    @And("the user selects the {string} option in the automation dropdown")
     public void theUserSelectsTheOptionInTheAutomationDropdown(String option) {
         String errorMessage = "";
         String stepName = "When the user selects the "+option+" option in the automation dropdown";
-
-        Result<Boolean> setValueResult = formFieldsSection.chooseOptionFromSelectWebElement(formFieldsSection.getAutomationDropdownCssSelectorId(), option, formFieldsSection.getFormFieldsSectionErrorCode());
         boolean expectedValue = false;
+
+        Result<Boolean> setValueResult = formFieldsSection.scrollsToElement(By.cssSelector(formFieldsSection.getAutomationDropdownCssSelectorId()),formFieldsSection.getErrorCode());
+        if(setValueResult.isFailure()){
+            ErrorLogManager.saveScreenShotToAllure(stepName,formFieldsSection.getWebDriver());
+            Assert.fail(setValueResult.getError().toString());
+        }
+
+        setValueResult = formFieldsSection.chooseOptionFromSelectWebElement(formFieldsSection.getAutomationDropdownCssSelectorId(), option, formFieldsSection.getFormFieldsSectionErrorCode());
+
         if(setValueResult.isSuccess()){
             expectedValue = setValueResult.getValue().get();
         }else{
@@ -114,7 +117,7 @@ public class FormFieldSteps {
         Assert.assertTrue(expectedValue,  errorMessage);
     }
 
-    @When("the user enters the message {string} in the message input field")
+    @And("the user enters the message {string}")
     public void theUserEntersTheMessageInTheMessageInputField(String message) {
         String errorMessage = "";
         String stepName = "When the user enters the message "+message+" in the message input field";
@@ -130,9 +133,15 @@ public class FormFieldSteps {
     }
 
     @And("the user clicks on the submit button")
-    public void theUserClicksOnTheSubmitButton() {
+    public void theUserClicksOnTheSubmitButton() throws InterruptedException {
         String errorMessage = "";
-        Result<Boolean> clickResult = formFieldsSection.clickElementByXpathText("Submit", formFieldsSection.getFormFieldsSectionErrorCode());
+
+        Result<Boolean> scrollToSubmitButton = formFieldsSection.scrollsToElement(By.cssSelector(formFieldsSection.getSubmitButtonSelectorId()),formFieldsSection.getErrorCode());
+        if(scrollToSubmitButton.isFailure()){
+           Assert.fail(scrollToSubmitButton.getError().toString());
+        }
+        Thread.sleep(4*1000);
+        Result<Boolean> clickResult = formFieldsSection.clickElementByCssSelector(formFieldsSection.getSubmitButtonSelectorId(), formFieldsSection.getFormFieldsSectionErrorCode());
         String stepName = "And the user clicks on the submit button";
         boolean expectedValue = false;
         if(clickResult.isSuccess()){
@@ -140,14 +149,14 @@ public class FormFieldSteps {
         }else{
             errorMessage = clickResult.getError().get();
         }
-
+      //Commented line
       //  ErrorLogManager.saveScreenShotToAllure(stepName,formFieldsSection.getWebDriver());
         Assert.assertTrue(expectedValue,  errorMessage);
 
     }
 
     @Then("the user should see the following confirmation message {string}")
-    public void validateConfirmationMessage(String message) {
+    public void validateConfirmationMessageIsDisplayed(String message) {
         String errorMessage = "";
         String actualMessage="";
         Result<String> messageResult = formFieldsSection.getAlertText(formFieldsSection.getFormFieldsSectionErrorCode());
@@ -162,6 +171,19 @@ public class FormFieldSteps {
     }
 
 
+    @Then("the user should not see the following confirmation message {string}")
+    public void validateConfirmationMessageIsNotDisplayed(String message) {
+        String errorMessage = "";
+        String actualMessage="";
+
+        Result<Boolean> webElementFindResult = formFieldsSection.validateElementIsNotVisible( By.xpath(String.format("//*[contains(text(),'%s')]",message)),formFieldsSection.getFormFieldsSectionErrorCode());
+        String stepName = String.format("Then the user should see the following confirmation message %s",message);
+        if(webElementFindResult.isFailure()){
+            Assert.fail(webElementFindResult.getError().get());
+        }
+        ErrorLogManager.saveScreenShotToAllure(stepName,formFieldsSection.getWebDriver());
+        Assert.assertFalse(webElementFindResult.getValue().get(), errorMessage);
+    }
 
     @And("^the user waits for (\\d+) seconds$")
     public void theUserWaitsForSeconds(int seconds) throws InterruptedException {

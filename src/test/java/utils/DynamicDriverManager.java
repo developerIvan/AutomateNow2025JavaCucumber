@@ -28,7 +28,10 @@ public class DynamicDriverManager {
                 default:
                     throw new IllegalArgumentException("Unsupported browser: " + browser);
             }
-            driver.get().manage().window().maximize();
+            if(!isHeadless){
+              driver.get().manage().window().maximize();
+            }
+
         }
         return driver.get();
     }

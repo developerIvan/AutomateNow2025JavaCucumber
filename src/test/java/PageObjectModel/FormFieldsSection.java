@@ -13,6 +13,9 @@ public class FormFieldsSection extends GeneralSelectorActions {
     private final String emailCssSelectorId ="email";
     private  final String messageCssSelectorId ="message";
 
+    private final String submitButtonSelectorId = "[data-testid='submit-btn']";
+
+
     public String getFormFieldsSectionErrorCode() {
         return errorCode;
     }
@@ -31,5 +34,9 @@ public class FormFieldsSection extends GeneralSelectorActions {
 
     public String getMessageCssSelectorId() {
         return messageCssSelectorId;
+    }
+
+    public String getSubmitButtonSelectorId() {
+        return submitButtonSelectorId;
     }
 }
