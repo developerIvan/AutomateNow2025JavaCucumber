@@ -1,6 +1,8 @@
 package PageObjectModel;
 import ResultPattern.Result;
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.interactions.WheelInput;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.Wait;
@@ -190,6 +192,7 @@ public class GeneralSelectorActions {
         String errorId ="";
         try {
             Result<WebElement> clickableElement = findElementBySpecificCSSClass(cssSelector,errorCode);
+            this.wait.until(ExpectedConditions.visibilityOf(mainDriver.findElement(By.cssSelector(cssSelector))));
             if(clickableElement.isFailure()){
                 return Result.failure(clickableElement.getError().toString().replace("Optional",""));
             }
@@ -233,7 +236,9 @@ public class GeneralSelectorActions {
     public Result<Boolean> scrollsToText(String textParam, String errorCode) {
         try {
             WebElement element = mainDriver.findElement(By.xpath("//*[contains(text(),'"+textParam+"')]"));
-            ((JavascriptExecutor) mainDriver).executeScript("arguments[0].scrollIntoViewIfNeeded();", element);
+            ((JavascriptExecutor) mainDriver).executeScript("arguments[0].scrollIntoView(true);",element );
+            //Defined on purpose to simulate scrolling tim
+            Thread.sleep(500);
             this.wait.until(ExpectedConditions.visibilityOf(element));
             return Result.success(true);
         } catch (Exception e) {
@@ -246,8 +251,10 @@ public class GeneralSelectorActions {
     public Result<Boolean> scrollsToElement(By bySelector, String errorCode) {
         try {
             WebElement element = mainDriver.findElement(bySelector);
-            ((JavascriptExecutor) mainDriver).executeScript("arguments[0].scrollIntoViewIfNeeded();", element);
-            this.wait.until(ExpectedConditions.visibilityOf(element));
+            ((JavascriptExecutor) mainDriver).executeScript("arguments[0].scrollIntoView(true);",element );
+            //Defined on purpose to simulate scrolling time
+            Thread.sleep(500);
+            this.wait.until(ExpectedConditions.visibilityOf(mainDriver.findElement(bySelector)));
             if(element.isDisplayed()){
                 return Result.success(true);
             }else {
@@ -260,6 +267,29 @@ public class GeneralSelectorActions {
             return Result.failure(String.format("Error scrolling to element: %s error code: %s ",bySelector.toString(),errorId));
         }
     }
+
+    public Result<Boolean> scrollsFromToElement(By bySelector,int xAxis,int yAxis, String errorCode) {
+        try {
+            WebElement element = mainDriver.findElement(bySelector);
+            WheelInput.ScrollOrigin scrollOrigin = WheelInput.ScrollOrigin.fromElement( mainDriver.findElement(bySelector));
+            new Actions(mainDriver)
+                    .scrollFromOrigin(scrollOrigin, xAxis, yAxis)
+                    .perform();
+
+            this.wait.until(ExpectedConditions.visibilityOf(element));
+            if(element.isDisplayed()){
+                return Result.success(true);
+            }else {
+                return Result.failure(String.format("Error scrolling from element: %s because is not visible",bySelector.toString()));
+            }
+
+        } catch (Exception e) {
+            String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
+            ErrorLogManager.logError(errorId,e,"Error on scrolling to text");
+            return Result.failure(String.format("Error scrolling from element: %s error code: %s ",bySelector.toString(),errorId));
+        }
+    }
+
 
     public Result<String> getAlertText(String errorCode) {
         try {

@@ -37,7 +37,7 @@ public class GenericSteps {
             errorMessage = elementIsVisible.getError().get();
         }
         String stepName =String.format("the user waits for text %s to be visible",text);
-        ErrorLogManager.saveScreenShotToAllure(stepName);
+        ErrorLogManager.saveScreenShotToAllure(stepName,generalSelectorActions.getWebDriver());
         Assert.assertTrue(expectedTextIsVisible, "Element not found with text: "+text + " "+errorMessage + "");
     }
 
@@ -52,7 +52,7 @@ public class GenericSteps {
             errorMessage = elementIsVisible.getError().get();
         }
         String stepName =String.format("the user is able to see the section %s",text);
-        ErrorLogManager.saveScreenShotToAllure(stepName);
+        ErrorLogManager.saveScreenShotToAllure(stepName,generalSelectorActions.getWebDriver());
         Assert.assertTrue(expectedTextIsVisible, "Element not found with text: "+text + " "+errorMessage + "");
     }
 
@@ -67,7 +67,7 @@ public class GenericSteps {
         }else if(clickResult.isFailure()){
             errorMessage = clickResult.getError().get();
         }
-        ErrorLogManager.saveScreenShotToAllure(stepName);
+        ErrorLogManager.saveScreenShotToAllure(stepName,generalSelectorActions.getWebDriver());
         Assert.assertTrue(expecteClickResult, "Error clicking on link: "+linkText+ " " +errorMessage);
     }
 

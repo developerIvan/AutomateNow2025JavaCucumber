@@ -18,9 +18,11 @@ Feature: Form Fields confirmation message
     And the user enters the message "This is a test message"
     And the user clicks on the submit button
     Then the user should see the following confirmation message "Message received!"
-  @E2E @FormFieldsSection @TC-005
+
+  @E2E @FormFieldsSection @TC-007
   Scenario: User is able to validate the confirmation message is not displayed
     Given the user is able to see the section "Form Fields"
     When the user enters "" in the field name
+    And the user scrolls to "Message"
     And the user clicks on the submit button
     Then the user should not see the following confirmation message "Message received!"

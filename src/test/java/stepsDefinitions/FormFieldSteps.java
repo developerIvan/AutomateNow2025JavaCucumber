@@ -6,13 +6,14 @@ import io.cucumber.java.en.*;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import utils.ErrorLogManager;
-
+import io.github.cdimascio.dotenv.Dotenv;
 public class FormFieldSteps {
     private FormFieldsSection formFieldsSection;
-
+    private  Dotenv dotenv;
     public FormFieldSteps(Hooks configHooks) {
         formFieldsSection = new FormFieldsSection();
         formFieldsSection.setWebDriver(configHooks.getWebDriver());
+         dotenv = Dotenv.load();
     }
 
     @And("the user enter the password {string} in the password input field")
@@ -64,17 +65,26 @@ public class FormFieldSteps {
 
 
     @And("the user selects the {string} option in the automation dropdown")
-    public void theUserSelectsTheOptionInTheAutomationDropdown(String option) {
+    public void theUserSelectsTheOptionInTheAutomationDropdown(String option) throws InterruptedException {
         String errorMessage = "";
         String stepName = "When the user selects the "+option+" option in the automation dropdown";
         boolean expectedValue = false;
+        String browserName =  dotenv.get("browserName");
 
         Result<Boolean> setValueResult = formFieldsSection.scrollsToElement(By.cssSelector(formFieldsSection.getAutomationDropdownCssSelectorId()),formFieldsSection.getErrorCode());
+
         if(setValueResult.isFailure()){
             ErrorLogManager.saveScreenShotToAllure(stepName,formFieldsSection.getWebDriver());
             Assert.fail(setValueResult.getError().toString());
         }
 
+        if(browserName!=null && browserName.equalsIgnoreCase("firefox") ) {
+            setValueResult = formFieldsSection.scrollsFromToElement(By.cssSelector(formFieldsSection.getAutomationDropdownCssSelectorId()), 0, -50, formFieldsSection.getErrorCode());
+            if (setValueResult.isFailure()) {
+                ErrorLogManager.saveScreenShotToAllure(stepName, formFieldsSection.getWebDriver());
+                Assert.fail(setValueResult.getError().toString());
+            }
+        }
         setValueResult = formFieldsSection.chooseOptionFromSelectWebElement(formFieldsSection.getAutomationDropdownCssSelectorId(), option, formFieldsSection.getFormFieldsSectionErrorCode());
 
         if(setValueResult.isSuccess()){
@@ -102,20 +112,6 @@ public class FormFieldSteps {
     }
 
 
-    @Then("the user scrolls to automation select option")
-    public void scrollToSelector(){
-        String errorMessage = "";
-        Result<Boolean> setValueResult = formFieldsSection.scrollsToElement(By.cssSelector(formFieldsSection.getAutomationDropdownCssSelectorId()),formFieldsSection.getErrorCode());
-        boolean expectedValue = false;
-        if(setValueResult.isSuccess()){
-            expectedValue = setValueResult.getValue().get();
-        }else{
-            errorMessage = setValueResult.getError().get();
-        }
-        String stepName=String.format("the user scrolls to automation select option");
-        ErrorLogManager.saveScreenShotToAllure(stepName,formFieldsSection.getWebDriver());
-        Assert.assertTrue(expectedValue,  errorMessage);
-    }
 
     @And("the user enters the message {string}")
     public void theUserEntersTheMessageInTheMessageInputField(String message) {
@@ -135,15 +131,17 @@ public class FormFieldSteps {
     @And("the user clicks on the submit button")
     public void theUserClicksOnTheSubmitButton() throws InterruptedException {
         String errorMessage = "";
+        String stepName = "And the user clicks on the submit button";
+        boolean expectedValue = false;
 
         Result<Boolean> scrollToSubmitButton = formFieldsSection.scrollsToElement(By.cssSelector(formFieldsSection.getSubmitButtonSelectorId()),formFieldsSection.getErrorCode());
         if(scrollToSubmitButton.isFailure()){
+            ErrorLogManager.saveScreenShotToAllure(stepName,formFieldsSection.getWebDriver());
            Assert.fail(scrollToSubmitButton.getError().toString());
         }
-        Thread.sleep(4*1000);
+
         Result<Boolean> clickResult = formFieldsSection.clickElementByCssSelector(formFieldsSection.getSubmitButtonSelectorId(), formFieldsSection.getFormFieldsSectionErrorCode());
-        String stepName = "And the user clicks on the submit button";
-        boolean expectedValue = false;
+
         if(clickResult.isSuccess()){
             expectedValue = clickResult.getValue().get();
         }else{
