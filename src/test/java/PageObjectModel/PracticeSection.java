@@ -1,9 +1,9 @@
 package PageObjectModel;
 
-public class Practice extends GeneralSelectorActions  {
+public class PracticeSection extends GeneralSelectorActions  {
 
     private final String errorCode = "PracticeError-";
-    public Practice() {
+    public PracticeSection() {
         super();
     }
 

@@ -1,6 +1,7 @@
 package stepsDefinitions;
 import PageObjectModel.GeneralSelectorActions;
 import ResultPattern.Result;
+import io.cucumber.core.gherkin.Step;
 import io.cucumber.java.Before;
 import io.cucumber.java.BeforeStep;
 import io.cucumber.java.en.*;
@@ -56,19 +57,34 @@ public class GenericSteps {
         Assert.assertTrue(expectedTextIsVisible, "Element not found with text: "+text + " "+errorMessage + "");
     }
 
-    @When("the user clicks on the {string} link")
-    public void userClicksOnTheLink(String linkText) {
+    @When("the user clicks on {string}")
+    public void userClicksOnTheText(String text) {
         String errorMessage = "";
         Boolean expecteClickResult = false;
-        String stepName = "When the user clicks on the "+linkText+" link";
-        Result<Boolean> clickResult = generalSelectorActions.clickElementByXpathText(linkText,generalSelectorActions.getErrorCode());
+        String stepName = String.format("the user clicks on %s",text);
+        Result<Boolean> clickResult = generalSelectorActions.clickElementByXpathText(text,generalSelectorActions.getErrorCode());
         if(clickResult.isSuccess()){
             expecteClickResult = clickResult.getValue().get();
         }else if(clickResult.isFailure()){
             errorMessage = clickResult.getError().get();
         }
         ErrorLogManager.saveScreenShotToAllure(stepName,generalSelectorActions.getWebDriver());
-        Assert.assertTrue(expecteClickResult, "Error clicking on link: "+linkText+ " " +errorMessage);
+        Assert.assertTrue(expecteClickResult, "Error clicking on text: "+text+ " " +errorMessage);
+    }
+
+    @And("the user clicks on text {string}")
+    public void userClicksOnText(String text) {
+        String errorMessage = "";
+        Boolean expecteClickResult = false;
+        String stepName = String.format("the user clicks on text %s",text);
+        Result<Boolean> clickResult = generalSelectorActions.clickElementByXpathText(text,generalSelectorActions.getErrorCode());
+        if(clickResult.isSuccess()){
+            expecteClickResult = clickResult.getValue().get();
+        }else if(clickResult.isFailure()){
+            errorMessage = clickResult.getError().get();
+        }
+        ErrorLogManager.saveScreenShotToAllure(stepName,generalSelectorActions.getWebDriver());
+        Assert.assertTrue(expecteClickResult, "Error clicking on text: "+text+ " " +errorMessage);
     }
 
     @Then("the user validates if the string {string} is visible")
@@ -101,5 +117,33 @@ public class GenericSteps {
         ErrorLogManager.saveScreenShotToAllure(stepName,generalSelectorActions.getWebDriver());
         Assert.assertTrue(expectedValue,  errorMessage);
     }
+
+    @Then("the user validates the current url is not the same as {string}")
+    public void validateNewWindowUrl(String parentUrl){
+        String errorMessage = "";
+        String stepName=String.format("the user validates the current url is not the same as %s",parentUrl);
+
+        Result<String> currentUrl = generalSelectorActions.getCurrentPageUrl(generalSelectorActions.getErrorCode());
+        if(currentUrl.isFailure()){
+            errorMessage = currentUrl.getError().get();
+        }
+        ErrorLogManager.saveScreenShotToAllure(stepName, generalSelectorActions.getWebDriver());
+        Assert.assertNotEquals(parentUrl,currentUrl.getValue().get(), errorMessage);
+    }
+
+    @Then("the user validates the current url is the same as {string}")
+    public void validateUrlIsTheSame(String parentUrl){
+        String errorMessage = "";
+        String stepName=String.format("the user validates the current url is  the same as %s",parentUrl);
+
+        Result<String> currentUrl = generalSelectorActions.getCurrentPageUrl(generalSelectorActions.getErrorCode());
+        if(currentUrl.isFailure()){
+            errorMessage = currentUrl.getError().get();
+        }
+        ErrorLogManager.saveScreenShotToAllure(stepName, generalSelectorActions.getWebDriver());
+        Assert.assertEquals(parentUrl,currentUrl.getValue().get(), errorMessage);
+    }
+
+
 
 }
