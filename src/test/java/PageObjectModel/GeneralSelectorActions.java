@@ -7,7 +7,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +38,16 @@ public class GeneralSelectorActions {
             String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
             ErrorLogManager.logError(errorId,e,"Error on Opening WebBrowser");
             return Result.failure("Error opening page: "+url+" error code: "+errorId);
+        }
+    }
+
+    public Result <String> getCurrentPageUrl(String errorCode){
+        try {
+            return Result.success(mainDriver.getCurrentUrl());
+        } catch (Exception e) {
+            String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
+            ErrorLogManager.logError(errorId,e,"Error on retrieving current page title");
+            return Result.failure("Error on retrieving current page title error code: "+errorId);
         }
     }
 
@@ -161,7 +170,21 @@ public class GeneralSelectorActions {
     public Result<Boolean> clickElementByXpathText(String textParam,String errorCode) {
         String xpathSelector = "";
         try {
-            xpathSelector = "//*[text()='"+textParam+"']";
+            xpathSelector = String.format( "//*[text()='%s']",textParam);
+            mainDriver.findElement(By.xpath(xpathSelector)).click();
+            return Result.success(true);
+        } catch (Exception e) {
+            String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
+            ErrorLogManager.logError(errorId,e,"Error on clicking WebElement");
+            return Result.failure("Element not found with xpath selector  "+xpathSelector + " Error Code:"+errorId);
+
+        }
+    }
+
+    public Result<Boolean> clickElementByContainsXpathText(String textParam,String errorCode) {
+        String xpathSelector = "";
+        try {
+            xpathSelector = String.format( "//*[contains(text(),'%s')]",textParam);
             mainDriver.findElement(By.xpath(xpathSelector)).click();
             return Result.success(true);
         } catch (Exception e) {
@@ -290,6 +313,66 @@ public class GeneralSelectorActions {
         }
     }
 
+    public Result<Object[]> getCurrentWindows(String errorCode){
+        try{
+            Object[] windowHandles=mainDriver.getWindowHandles().toArray();
+            return Result.success(windowHandles);
+        }catch (Exception e) {
+            String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
+            ErrorLogManager.logError(errorId,e,"Error on retrieving windows  ");
+            return Result.failure(String.format("Error on retrieving current open  windows. Error Id: %s",errorId));
+        }
+    }
+
+    public Result<Boolean> switchToWindowOrTab(Object[] windowHandles,String expectedUrl,  String errorCode){
+        try{
+            mainDriver.switchTo().window((String) windowHandles[windowHandles.length-1]);
+            this.wait.until(ExpectedConditions.urlContains(expectedUrl));
+            return Result.success(true);
+        }catch (Exception e) {
+            String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
+            ErrorLogManager.logError(errorId,e,"Error on retrieving windows  ");
+            return Result.failure(String.format("Error on retrieving current open  windows with url %s. Error Id: %s",expectedUrl,errorId));
+        }
+    }
+
+    public Result<Boolean> closeCurrentWindowOrTab(String errorCode){
+        try{
+
+            mainDriver.close();
+            Object[] windowHandles=mainDriver.getWindowHandles().toArray();
+            mainDriver.switchTo().window((String) windowHandles[windowHandles.length-1]);
+            return Result.success(true);
+        }catch (Exception e) {
+            String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
+            ErrorLogManager.logError(errorId,e,"Error on retrieving current windows  ");
+            return Result.failure(String.format("Error on retrieving current open  windows. Error Id: %s",errorId));
+        }
+    }
+
+    public Result<Boolean> switchToNewTab( String errorCode){
+        try{
+            mainDriver.switchTo().newWindow(WindowType.TAB);
+            return Result.success(true);
+        }catch (Exception e) {
+            String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
+            String errorMessage = "Error on switching to new tab.";
+            ErrorLogManager.logError(errorId,e,errorMessage);
+            return Result.failure(String.format(errorMessage.concat("Error Id: %s"),errorId));
+        }
+    }
+
+    public Result<Boolean> switchToNewWindow( String errorCode){
+        try{
+            mainDriver.switchTo().newWindow(WindowType.WINDOW);
+            return Result.success(true);
+        }catch (Exception e) {
+            String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
+            String errorMessage = "Error on switching to new window.";
+            ErrorLogManager.logError(errorId,e,errorMessage);
+            return Result.failure(String.format(errorMessage.concat("Error Id: %s"),errorId));
+        }
+    }
 
     public Result<String> getAlertText(String errorCode) {
         try {

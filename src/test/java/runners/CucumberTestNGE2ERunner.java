@@ -12,7 +12,7 @@ import org.testng.annotations.DataProvider;
                 "pretty"
         },
         monochrome = true,
-        tags = "@TC-007"
+        tags = "@TC-0010-1"
 )
 public class CucumberTestNGE2ERunner extends    AbstractTestNGCucumberTests{
 
