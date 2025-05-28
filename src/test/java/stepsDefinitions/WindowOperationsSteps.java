@@ -31,8 +31,8 @@ public class WindowOperationsSteps {
         Assert.assertTrue(IsTheNewWindowOpen, errorMessage);
     }
 
-    @And("the user switch to a new tab")
-    public void userSwitchToNewTab(){
+    @And("the user switch to a new tab or window with url {string}")
+    public void userSwitchToNewTab(String expectedUrl){
         String errorMessage = "";
         boolean IsTheNewTabOpen = false;
         String stepName = "the user switch to a new tab";
@@ -42,7 +42,7 @@ public class WindowOperationsSteps {
             Assert.fail(errorMessage);
         }
 
-        Result<Boolean> openNewWindowResult = windowOperationsSection.switchToWindowByIndex(currentWindows.getValue().get(),1,windowOperationsSection.getErrorCode());
+        Result<Boolean> openNewWindowResult = windowOperationsSection.switchToWindowOrTab(currentWindows.getValue().get(),expectedUrl,windowOperationsSection.getErrorCode());
         if(openNewWindowResult.isSuccess()){
             IsTheNewTabOpen = openNewWindowResult.getValue().get();
         }else if(openNewWindowResult.isFailure()){
@@ -52,6 +52,23 @@ public class WindowOperationsSteps {
         Assert.assertTrue(IsTheNewTabOpen, errorMessage);
     }
 
+
+    @But("the user closes the current tab or window")
+    public void userClosesTheCurrentTab(){
+        String errorMessage = "";
+        boolean IsTheNewTabClosed = false;
+        String stepName = "the user closes the current tab";
+
+
+        Result<Boolean> CloseCurrentTab = windowOperationsSection.closeCurrentWindowOrTab(windowOperationsSection.getErrorCode());
+        if(CloseCurrentTab.isSuccess()){
+            IsTheNewTabClosed = CloseCurrentTab.getValue().get();
+        }else if(CloseCurrentTab.isFailure()){
+            errorMessage = CloseCurrentTab.getError().get();
+        }
+        ErrorLogManager.saveScreenShotToAllure(stepName, windowOperationsSection.getWebDriver());
+        Assert.assertTrue(IsTheNewTabClosed, errorMessage);
+    }
 
 
 

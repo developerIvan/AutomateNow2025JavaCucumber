@@ -72,12 +72,12 @@ public class GenericSteps {
         Assert.assertTrue(expecteClickResult, "Error clicking on text: "+text+ " " +errorMessage);
     }
 
-    @And("the user clicks on text {string}")
+    @And("the user clicks on  text like {string}")
     public void userClicksOnText(String text) {
         String errorMessage = "";
         Boolean expecteClickResult = false;
         String stepName = String.format("the user clicks on text %s",text);
-        Result<Boolean> clickResult = generalSelectorActions.clickElementByXpathText(text,generalSelectorActions.getErrorCode());
+        Result<Boolean> clickResult = generalSelectorActions.clickElementByContainsXpathText(text,generalSelectorActions.getErrorCode());
         if(clickResult.isSuccess()){
             expecteClickResult = clickResult.getValue().get();
         }else if(clickResult.isFailure()){
