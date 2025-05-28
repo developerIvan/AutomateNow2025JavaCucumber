@@ -7,8 +7,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.lang.reflect.Executable;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
