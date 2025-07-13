@@ -6,6 +6,8 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.FirefoxProfile;
+
 public class DynamicDriverManager {
 
     private ThreadLocal<WebDriver> driver = new ThreadLocal<>();
@@ -48,7 +50,10 @@ public class DynamicDriverManager {
 
     public FirefoxOptions getFireFoxOptions(boolean isHeadless,String browserHeight,String browserWidth){
         FirefoxOptions firefoxOptions = new FirefoxOptions();
-
+        FirefoxProfile profile = new FirefoxProfile();
+        profile.setPreference("security.fileuri.strict_origin_policy", false); // Menos restrictiva con file://
+        profile.setPreference("privacy.trackingprotection.enabled", false);
+        firefoxOptions.setProfile(profile);
         if(isHeadless){
             firefoxOptions.addArguments("--headless");
             firefoxOptions.addArguments("--width="+browserWidth+"");
