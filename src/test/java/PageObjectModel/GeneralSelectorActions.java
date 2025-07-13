@@ -110,20 +110,13 @@ public class GeneralSelectorActions {
     public Result<WebElement> findElementByExactXpathText(String textParam,String errorCode) {
         String xpathSelector = "";
         xpathSelector = "//*[text()='"+textParam+"']";
-        if(textParam.contains("Installation")){
-            ErrorLogManager.logInfo(String.format("Is an iframe %s",this.isInIframe()));
-        }
         Result<WebElement> foundedElement = this.retryFindingElement(By.xpath(xpathSelector),errorCode);
         return foundedElement;
     }
 
     public Result<WebElement> waitElementByXpathText(String textParam, String errorCode) {
         String xpathSelector = "//*[contains(text(),'"+textParam+"')]";
-        if (textParam.contains("Playwright Test")){
-            ErrorLogManager.logInfo(String.format("is an  iframe %s",this.isInIframe()));
-        }
         return retryWaitingForElement(By.xpath(xpathSelector),errorCode);
-
     }
 
     public String getErrorCode() {
@@ -261,7 +254,7 @@ public class GeneralSelectorActions {
         try {
             WebElement element = mainDriver.findElement(By.xpath("//*[contains(text(),'"+textParam+"')]"));
             ((JavascriptExecutor) mainDriver).executeScript("arguments[0].scrollIntoView(true);",element );
-            //Defined on purpose to simulate scrolling tim
+            //Defined on purpose to simulate scrolling time
             Thread.sleep(500);
             this.wait.until(ExpectedConditions.visibilityOf(element));
             return Result.success(true);

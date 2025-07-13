@@ -50,10 +50,6 @@ public class DynamicDriverManager {
 
     public FirefoxOptions getFireFoxOptions(boolean isHeadless,String browserHeight,String browserWidth){
         FirefoxOptions firefoxOptions = new FirefoxOptions();
-        FirefoxProfile profile = new FirefoxProfile();
-        profile.setPreference("security.fileuri.strict_origin_policy", false); // Menos restrictiva con file://
-        profile.setPreference("privacy.trackingprotection.enabled", false);
-        firefoxOptions.setProfile(profile);
         if(isHeadless){
             firefoxOptions.addArguments("--headless");
             firefoxOptions.addArguments("--width="+browserWidth+"");
