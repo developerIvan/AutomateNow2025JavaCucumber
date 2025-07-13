@@ -6,6 +6,8 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.FirefoxProfile;
+
 public class DynamicDriverManager {
 
     private ThreadLocal<WebDriver> driver = new ThreadLocal<>();
@@ -48,7 +50,6 @@ public class DynamicDriverManager {
 
     public FirefoxOptions getFireFoxOptions(boolean isHeadless,String browserHeight,String browserWidth){
         FirefoxOptions firefoxOptions = new FirefoxOptions();
-
         if(isHeadless){
             firefoxOptions.addArguments("--headless");
             firefoxOptions.addArguments("--width="+browserWidth+"");

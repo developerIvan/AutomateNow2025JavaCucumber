@@ -7,6 +7,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,9 @@ public class GeneralSelectorActions {
     protected WebDriver mainDriver;
     private String errorCode = "GeneralStepsError-";
 
+    public static String currentIframeName="";
     protected Wait<WebDriver> wait;
+    JavascriptExecutor js = null;
 
     public GeneralSelectorActions(){
     }
@@ -28,6 +31,7 @@ public class GeneralSelectorActions {
     public void setWebDriver(WebDriver driver){
         this.mainDriver =  driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        js = (JavascriptExecutor) mainDriver;
     }
 
     public Result <Boolean> openPage(String url,String errorCode){
@@ -105,28 +109,14 @@ public class GeneralSelectorActions {
 
     public Result<WebElement> findElementByExactXpathText(String textParam,String errorCode) {
         String xpathSelector = "";
-        try {
-            xpathSelector = "//*[text()='"+textParam+"']";
-            return Result.success(mainDriver.findElement(By.xpath(xpathSelector)));
-        } catch (Exception e) {
-            String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
-            ErrorLogManager.logError(errorId,e,"Error on finding WebElement");
-            return Result.failure("Element not found: with xpath selector  "+xpathSelector + " Error Code:"+errorId);
-        }
+        xpathSelector = "//*[text()='"+textParam+"']";
+        Result<WebElement> foundedElement = this.retryFindingElement(By.xpath(xpathSelector),errorCode);
+        return foundedElement;
     }
 
     public Result<WebElement> waitElementByXpathText(String textParam, String errorCode) {
-        String xpathSelector = "";
-        try {
-            xpathSelector = "//*[contains(text(),'"+textParam+"')]";
-            WebElement expectedElement = mainDriver.findElement(By.xpath(xpathSelector));
-            wait.until(ExpectedConditions.visibilityOf(expectedElement));
-            return Result.success(expectedElement);
-        } catch (Exception e) {
-            String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
-            ErrorLogManager.logError(errorId,e,"Error on waiting WebElement");
-            return Result.failure("Element not found: with xpath selector  "+xpathSelector +" after waiting 30 seconds Error Code:"+errorId);
-        }
+        String xpathSelector = "//*[contains(text(),'"+textParam+"')]";
+        return retryWaitingForElement(By.xpath(xpathSelector),errorCode);
     }
 
     public String getErrorCode() {
@@ -156,6 +146,10 @@ public class GeneralSelectorActions {
 
     public List<WebElement> findElements(By bySelector) {
       return mainDriver.findElements(bySelector);
+    }
+
+    public WebElement findElement(By bySelector) {
+        return mainDriver.findElement(bySelector);
     }
 
     public Result<ArrayList<WebElement>> findElementsByCss(String cssSelector) {
@@ -260,7 +254,7 @@ public class GeneralSelectorActions {
         try {
             WebElement element = mainDriver.findElement(By.xpath("//*[contains(text(),'"+textParam+"')]"));
             ((JavascriptExecutor) mainDriver).executeScript("arguments[0].scrollIntoView(true);",element );
-            //Defined on purpose to simulate scrolling tim
+            //Defined on purpose to simulate scrolling time
             Thread.sleep(500);
             this.wait.until(ExpectedConditions.visibilityOf(element));
             return Result.success(true);
@@ -362,6 +356,33 @@ public class GeneralSelectorActions {
         }
     }
 
+    public Result<Boolean> switchToIframe(String iframeName, String errorCode){
+        try{
+            wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.name(iframeName)));
+            currentIframeName = iframeName;
+            return Result.success(this.isInIframe());
+        }catch (Exception e) {
+            String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
+            String errorMessage = String.format("Error on switching to frame with name: %s",iframeName);
+            ErrorLogManager.logError(errorId,e,errorMessage);
+            return Result.failure(String.format(errorMessage.concat("Error Id: %s"),errorId));
+        }
+    }
+
+    public Result<Boolean> switchFromIframeToCurrentWebPage( String errorCode){
+        try{
+
+            mainDriver.switchTo().defaultContent();
+            currentIframeName="";
+            return Result.success(true);
+        }catch (Exception e) {
+            String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
+            String errorMessage = String.format("Error on switching from frame %s to current webpage :"+ getCurrentIframeName());
+            ErrorLogManager.logError(errorId,e,errorMessage);
+            return Result.failure(String.format(errorMessage.concat("Error Id: %s"),errorId));
+        }
+    }
+
     public Result<Boolean> switchToNewWindow( String errorCode){
         try{
             mainDriver.switchTo().newWindow(WindowType.WINDOW);
@@ -401,5 +422,61 @@ public class GeneralSelectorActions {
 
     }
 
+    public Result<List<WebElement>> retryFindingElements(By bySelector, String errorCode){
+        int retries = 3;
+        String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
 
+        do{
+            try{
+                List<WebElement> elementList = this.findElements(bySelector);
+                return Result.success(elementList);
+            }catch(Exception e){
+                ErrorLogManager.logError(errorId,e,String.format("Error on  retrieving web elements using selector  %s",bySelector));
+            }
+            retries--;
+        }while(retries>0);
+        return Result.failure(String.format("Error on  retrieving web elements. error Id: ",errorId));
+    }
+
+    public Result<WebElement> retryFindingElement(By bySelector, String errorCode){
+        int retries = 3;
+        String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
+
+        do{
+            try{
+                WebElement elementList = this.findElement(bySelector);
+                return Result.success(elementList);
+            }catch(Exception e){
+                ErrorLogManager.logError(errorId,e,String.format("Error on  retrieving web elements using selector  %s",bySelector));
+            }
+            retries--;
+        }while(retries>0);
+        return Result.failure(String.format("Error on  retrieving web elements. error Id: %s ",errorId));
+    }
+
+    public Result<WebElement> retryWaitingForElement(By bySelector, String errorCode){
+        int retries = 3;
+        String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
+
+        do{
+            try{
+                wait.until(ExpectedConditions.visibilityOfElementLocated(bySelector));
+                WebElement element = this.findElements(bySelector).get(0);
+                return Result.success(element);
+            }catch(Exception e){
+                ErrorLogManager.logError(errorId,e,String.format("Error on  retrieving web element using selector  %s",bySelector));
+            }
+            retries--;
+        }while(retries>0);
+        return Result.failure(String.format("Error on  retrieving web element. error Id: %s ",errorId));
+    }
+
+    public String getCurrentIframeName() {
+        return currentIframeName;
+    }
+
+
+    public Boolean isInIframe(){
+        return !(Boolean) js.executeScript("return window.self === window.top;");
+    }
 }

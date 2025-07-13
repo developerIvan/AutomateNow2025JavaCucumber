@@ -1,6 +1,5 @@
 package stepsDefinitions;
 import ResultPattern.Result;
-import io.cucumber.core.gherkin.Step;
 import io.cucumber.java.en.*;
 import org.testng.Assert;
 import utils.ErrorLogManager;
@@ -16,10 +15,10 @@ public class WindowOperationsSteps {
     }
 
     @And("the user switch to a new window")
-    public void userSwitchToNewWindow(Step step){
+    public void userSwitchToNewWindow(){
         String errorMessage = "";
         boolean IsTheNewWindowOpen = false;
-        String stepName = step.toString();
+        String stepName = "the user switch to a new window";
 
         Result<Boolean> openNewWindowResult = windowOperationsSection.switchToNewWindow(windowOperationsSection.getErrorCode());
         if(openNewWindowResult.isSuccess()){

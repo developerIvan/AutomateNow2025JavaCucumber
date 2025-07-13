@@ -4,7 +4,9 @@ import ResultPattern.Result;
 import io.cucumber.core.gherkin.Step;
 import io.cucumber.java.Before;
 import io.cucumber.java.BeforeStep;
+import io.cucumber.java.Scenario;
 import io.cucumber.java.en.*;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
@@ -13,23 +15,20 @@ public class GenericSteps {
 
     public GeneralSelectorActions generalSelectorActions;
 
+   private Boolean isAnIframeScenario ;
 
     public GenericSteps(Hooks configHooks) {
         generalSelectorActions = new GeneralSelectorActions();
         generalSelectorActions.setWebDriver(configHooks.getWebDriver());
         ErrorLogManager.setWebDriver(configHooks.getWebDriver());
-    }
-
-    public GenericSteps(WebDriver driver){
-        generalSelectorActions = new GeneralSelectorActions();
-        generalSelectorActions.setWebDriver(driver);
-        ErrorLogManager.setWebDriver(driver);
-        ErrorLogManager.logInfo("GenericSteps driver session " + driver);
+        String scenarioName = configHooks.getScenarioName();
+        isAnIframeScenario =scenarioName.toLowerCase().contains("iframe")?true:false;
     }
 
     @And("the user waits for text {string} to be visible")
     public void userWaitsForTheTextToBeVisible(String text) {
         String errorMessage = "";
+
         Result<WebElement> elementIsVisible = generalSelectorActions.waitElementByXpathText(text,generalSelectorActions.getErrorCode());
         Boolean expectedTextIsVisible = false;
         if(elementIsVisible.isSuccess()){
@@ -38,7 +37,14 @@ public class GenericSteps {
             errorMessage = elementIsVisible.getError().get();
         }
         String stepName =String.format("the user waits for text %s to be visible",text);
-        ErrorLogManager.saveScreenShotToAllure(stepName,generalSelectorActions.getWebDriver());
+
+
+        if(this.isAnIframeScenario && generalSelectorActions.isInIframe()) {
+
+            ErrorLogManager.saveScreenShotToAllure(stepName, generalSelectorActions.getWebDriver(),GeneralSelectorActions.currentIframeName);
+        }else{
+            ErrorLogManager.saveScreenShotToAllure(stepName,generalSelectorActions.getWebDriver());
+        }
         Assert.assertTrue(expectedTextIsVisible, "Element not found with text: "+text + " "+errorMessage + "");
     }
 
@@ -68,11 +74,12 @@ public class GenericSteps {
         }else if(clickResult.isFailure()){
             errorMessage = clickResult.getError().get();
         }
+
         ErrorLogManager.saveScreenShotToAllure(stepName,generalSelectorActions.getWebDriver());
         Assert.assertTrue(expecteClickResult, "Error clicking on text: "+text+ " " +errorMessage);
     }
 
-    @And("the user clicks on  text like {string}")
+    @And("the user clicks on text like {string}")
     public void userClicksOnText(String text) {
         String errorMessage = "";
         Boolean expecteClickResult = false;
@@ -83,7 +90,13 @@ public class GenericSteps {
         }else if(clickResult.isFailure()){
             errorMessage = clickResult.getError().get();
         }
-        ErrorLogManager.saveScreenShotToAllure(stepName,generalSelectorActions.getWebDriver());
+
+        if(!generalSelectorActions.isInIframe()) {
+            ErrorLogManager.saveScreenShotToAllure(stepName,generalSelectorActions.getWebDriver());
+        }else{
+            ErrorLogManager.saveScreenShotToAllure(stepName, generalSelectorActions.getWebDriver(),GeneralSelectorActions.currentIframeName);
+        }
+
         Assert.assertTrue(expecteClickResult, "Error clicking on text: "+text+ " " +errorMessage);
     }
 
@@ -96,10 +109,15 @@ public class GenericSteps {
             stringIsVisible = elementResult.getValue().get().isDisplayed();
 
         }else if(elementResult.isFailure()){
-            errorMessage = elementResult.getError().get();
+            errorMessage = elementResult.getError().get().toString();
         }
         String stepName =String.format("the user validates if the string %s is visible",stringParam);
-        ErrorLogManager.saveScreenShotToAllure(stepName,generalSelectorActions.getWebDriver());
+
+        if(!generalSelectorActions.isInIframe()) {
+            ErrorLogManager.saveScreenShotToAllure(stepName,generalSelectorActions.getWebDriver());
+        }else{
+            ErrorLogManager.saveScreenShotToAllure(stepName, generalSelectorActions.getWebDriver(),GeneralSelectorActions.currentIframeName);
+        }
         Assert.assertTrue(stringIsVisible, "Element "+stringParam+" not displayed "+errorMessage);
     }
 
@@ -143,7 +161,5 @@ public class GenericSteps {
         ErrorLogManager.saveScreenShotToAllure(stepName, generalSelectorActions.getWebDriver());
         Assert.assertEquals(parentUrl,currentUrl.getValue().get(), errorMessage);
     }
-
-
 
 }
