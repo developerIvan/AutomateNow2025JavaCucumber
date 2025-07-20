@@ -86,24 +86,12 @@ public class GeneralSelectorActions {
             String xpathSelector ="//*[text()='"+label+"']//following::input[@value='"+value+"']";
 
             WebElement inputField = mainDriver.findElement(By.xpath(xpathSelector));
-            inputField.sendKeys(value);
+            inputField.click();
             return Result.success(true);
         } catch (Exception e) {
             String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
             ErrorLogManager.logError(errorId,e,"Error on filling input field");
             return Result.failure("Error selecting input with value: "+value+"  error code: "+errorId);
-        }
-    }
-
-    public Result<WebElement> findElementByXpathText(String textParam,String errorCode) {
-        String xpathSelector = "";
-        try {
-             xpathSelector = "//*[contains(text(),'"+textParam+"')]";
-            return Result.success(mainDriver.findElement(By.xpath(xpathSelector)));
-        } catch (Exception e) {
-            String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
-            ErrorLogManager.logError(errorId,e,"Error on finding WebElement");
-            return Result.failure("Element not found: with xpath selector  "+xpathSelector + " Error Code:"+errorId);
         }
     }
 
@@ -219,22 +207,6 @@ public class GeneralSelectorActions {
             errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
             ErrorLogManager.logError(errorId,e,"Error on clicking WebElement");;
             return Result.failure(String.format("Could not be able to click on WebElement found with given cssClass selector %s Error Code: %s ",cssSelector,errorId));
-        }
-    }
-
-    public Result<Boolean> selectOptionByValue(String cssSelector,String errorCode) {
-        String errorId ="";
-        try {
-            Result<WebElement> clickableElement = findElementBySpecificCSSClass(cssSelector,errorCode);
-            if(clickableElement.isFailure()){
-                return Result.failure(clickableElement.getError().toString().replace("Optional",""));
-            }
-            clickableElement.getValue().get().click();
-            return Result.success(true);
-        } catch (Exception e) {
-            errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
-            ErrorLogManager.logError(errorId,e,"Error on clicking WebElement");;
-            return Result.failure("Could not be able to select an option with selector:"+cssSelector+" Error Code: "+errorId);
         }
     }
 
@@ -422,21 +394,6 @@ public class GeneralSelectorActions {
 
     }
 
-    public Result<List<WebElement>> retryFindingElements(By bySelector, String errorCode){
-        int retries = 3;
-        String errorId = ErrorLogManager.getUniqueErrorCode(errorCode);
-
-        do{
-            try{
-                List<WebElement> elementList = this.findElements(bySelector);
-                return Result.success(elementList);
-            }catch(Exception e){
-                ErrorLogManager.logError(errorId,e,String.format("Error on  retrieving web elements using selector  %s",bySelector));
-            }
-            retries--;
-        }while(retries>0);
-        return Result.failure(String.format("Error on  retrieving web elements. error Id: ",errorId));
-    }
 
     public Result<WebElement> retryFindingElement(By bySelector, String errorCode){
         int retries = 3;

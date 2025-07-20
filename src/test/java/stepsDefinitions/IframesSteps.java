@@ -33,20 +33,5 @@ public class IframesSteps {
         Assert.assertTrue(doesBrowserSwitchToIframe, errorMessage);
     }
 
-    @And("the user returns to the current webPage from Iframe")
-    public void userReturnsToCurrentPage(){
-        String errorMessage = "";
-        boolean IsTheNewWindowOpen = false;
-        String stepName = "the user returns to the current webPage from Iframe";
-
-        Result<Boolean> openNewWindowResult = iFrameSection.switchFromIframeToCurrentWebPage(iFrameSection.getErrorCode());
-        if(openNewWindowResult.isSuccess()){
-            IsTheNewWindowOpen = openNewWindowResult.getValue().get();
-        }else if(openNewWindowResult.isFailure()){
-            errorMessage = openNewWindowResult.getError().get();
-        }
-        ErrorLogManager.saveScreenShotToAllure(stepName, iFrameSection.getWebDriver());
-        Assert.assertTrue(IsTheNewWindowOpen, errorMessage);
-    }
 }
 
