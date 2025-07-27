@@ -147,7 +147,7 @@ public class FormFieldSteps {
         }else{
             errorMessage = clickResult.getError().get();
         }
-      //Commented line
+      //Commented line to avoid selenium screenshot due to alert
       //  ErrorLogManager.saveScreenShotToAllure(stepName,formFieldsSection.getWebDriver());
         Assert.assertTrue(expectedValue,  errorMessage);
 

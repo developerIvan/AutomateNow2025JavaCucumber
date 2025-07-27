@@ -51,9 +51,10 @@ This project showcases **automated UI testing** for a web application using **Se
     ```
     "Alternative run features by tags . Example"
     "powershell"
-    mvn clean test -D"cucumber.filter.tags=@E2E and not @PracticeSection"
+      mvn clean test -Dcucumber.filter.tags="@E2E and not @PracticeSection"
     "bash o cmd"
-    mvn clean test -Dcucumber.filter.tags="@E2E and not @PracticeSection"
+      mvn clean test -D"cucumber.filter.tags=@E2E and not @PracticeSection"
+  
     ```
 ## 🚀 Reporting    
 1.**Generate Allure report**
@@ -64,3 +65,11 @@ This project showcases **automated UI testing** for a web application using **Se
    ```sh
      mvn allure:serve
    ```
+3.**Generate Allure report from GitHub Actions**
+   3.1 Download the following artifacts:
+         allure-results
+   3.2 Extract the allure-results file in the desired folder
+        /<ReportFolder>/allure-resuls
+   3.3 Execute the following command inside /<ReportFolder>/
+       allure serve
+
