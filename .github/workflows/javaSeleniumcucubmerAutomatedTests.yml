@@ -2,7 +2,7 @@ name: Run Selenium Tests with Headless Chrome #wrokflow name
 
 on:
   schedule:
-    - cron: '34 05 * * *'
+    - cron: '00 03 * * *'
 
   
 jobs:
@@ -12,7 +12,7 @@ jobs:
       browserName: chrome
       browserHeight: 1920
       browserWidth:  1080
-          
+      isHeadLessBrowser: true   
           
     steps:
      - name: 🛠 Checkout repo
@@ -35,7 +35,8 @@ jobs:
           touch .env
           echo browserName=$browserName >> .env
           echo browserHeight=$browserHeight >> .env
-          echo browserWidth=$browserWidth  >> .env
+          echo browserWidth=$browserWidth >> .env
+          echo isHeadLessBrowser=$isHeadLessBrowser >> .env   
          # cat .env
           
      - name: 🧪 Run Tests
