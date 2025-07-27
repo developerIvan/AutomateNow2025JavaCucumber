@@ -12,12 +12,12 @@ import org.testng.annotations.DataProvider;
                 "pretty"
         },
         monochrome = true,
-        tags = "@TC-0015"
+        tags = "@E2E"
 )
 public class CucumberTestNGE2ERunner extends    AbstractTestNGCucumberTests{
 
     @Override
-    @DataProvider(parallel = true) //This is to run the scenarios in parallel
+    @DataProvider(parallel = true)
     public Object[][] scenarios() {
         return super.scenarios();
     }

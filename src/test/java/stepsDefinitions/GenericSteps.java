@@ -1,13 +1,7 @@
 package stepsDefinitions;
 import PageObjectModel.GeneralSelectorActions;
 import ResultPattern.Result;
-import io.cucumber.core.gherkin.Step;
-import io.cucumber.java.Before;
-import io.cucumber.java.BeforeStep;
-import io.cucumber.java.Scenario;
 import io.cucumber.java.en.*;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import utils.ErrorLogManager;
